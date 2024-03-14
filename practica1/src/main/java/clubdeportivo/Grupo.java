@@ -14,6 +14,9 @@ public class Grupo {
 		if (matriculados>nplazas) {
 			throw new ClubException("ERROR: El número de plazas es menor que el de matriculados.");
 		}
+		if (codigo == "" || actividad == "") {
+			throw new ClubException("ERROR: Los campos de actividad y codigo no pueden ser nulos.");
+		}
 		this.codigo=codigo;
 		this.actividad=actividad;
 		this.nplazas=nplazas;
@@ -53,8 +56,11 @@ public class Grupo {
 	}
 	
 	public void matricular(int n) throws ClubException {
-		if (plazasLibres()< n || n<=0) {
+		if (plazasLibres()< n) {
 			throw new ClubException("ERROR: no hay plazas libres suficientes, plazas libre: "+ plazasLibres()+ " y matriculas: "+n);
+		}
+		else if (n<=0) {
+			throw new ClubException("ERROR: El numero de matrículas nuevas no puede ser negativo o nulo.");
 		}
 		nmatriculados+=n;
 	}
