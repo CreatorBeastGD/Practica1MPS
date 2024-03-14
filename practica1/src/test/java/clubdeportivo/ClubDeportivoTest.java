@@ -142,7 +142,133 @@ public class ClubDeportivoTest
         assertEquals(expected, output);
     }
 
+    /**
+    * Añadir al club un grupo mediante el pase de datos
+    * correctos en un array de Strings y que este se añada correctamente
+    */
+    @Test
+    public void AnyadirGrupoMedianteArrayDatosConExitoTest() throws ClubException
+    {
+        // Arrange
+        String[] datos = {"1", "Baloncesto", "40", "10", "20.0"};
+        String output;
+        String expected = "Málaga --> [ (1 - Baloncesto - 20.0 euros - P:40 - M:10) ]";
 
-  
+        // Act
+        cd.anyadirActividad(datos);
+        output = cd.toString();
+        
+        // Assert
+        assertEquals(expected, output);
+
+    }
+
+    /**
+     * Añadir al club un grupo mediante el pase de datos
+     * en un array de Strings pero que el dato nplazas no sea 
+     * un número debe lanzar una expeción
+     */
+    @Test
+    public void AnyadirGrupoMedianteArrayDatosConIncorrectoArgumentoNPlazas()
+    {
+        // Arrange
+        String[] datos = {"1", "Baloncesto", "hola", "10", "20.0"};
+        Class<ClubException> expected = ClubException.class;
+        String expectedMsg = "ERROR: formato de número incorrecto";
+
+        // Act
+        Executable input = () -> cd.anyadirActividad(datos);
+        
+        // Assert
+        assertThrows(expected, input, expectedMsg);
+    }
+
+    /**
+     * Añadir al club un grupo mediante el pase de datos
+     * en un array de Strings pero que el dato matriculados no sea 
+     * un número debe lanzar una expeción
+     */
+    @Test
+    public void AnyadirGrupoMedianteArrayDatosConIncorrectoArgumentoMatriculados()
+    {
+        // Arrange
+        String[] datos = {"1", "Baloncesto", "40", "hola", "20.0"};
+        Class<ClubException> expected = ClubException.class;
+        String expectedMsg = "ERROR: formato de número incorrecto";
+
+        // Act
+        Executable input = () -> cd.anyadirActividad(datos);
+        
+        // Assert
+        assertThrows(expected, input, expectedMsg);
+    }
+
+    /**
+     * Añadir al club un grupo mediante el pase de datos
+     * en un array de Strings pero que el dato nplazas no sea 
+     * un número debe lanzar una expeción
+     */
+    @Test
+    public void AnyadirGrupoMedianteArrayDatosConIncorrectoArgumentoTarifa()
+    {
+        // Arrange
+        String[] datos = {"1", "Baloncesto", "40", "10", "hola"};
+        Class<ClubException> expected = ClubException.class;
+        String expectedMsg = "ERROR: formato de número incorrecto";
+
+        // Act
+        Executable input = () -> cd.anyadirActividad(datos);
+        
+        // Assert
+        assertThrows(expected, input, expectedMsg);
+    }
+
+    /**
+     * Un club sin grupos devolverá cero si 
+     * se consulta las plazas libres de lo que sea
+     */
+    @Test
+    public void ClubSinGruposImplicaCeroPlazasLibres()
+    {
+        // Arrange
+        int expected = 0;
+        int output;
+
+        // Act 
+        output = cd.plazasLibres("Baloncesto");
+
+        // Assert
+        assertEquals(expected, output);
+
+    }
+
+    /**
+     * Consultar las plazas libres de un actividad
+     * que no tiene un club devuelve cero
+     * @throws ClubException 
+     */
+    @Test
+    public void ActividadConsultadaQueNoTieneELClubImplicaCeroPlazasLibres() throws ClubException
+    {
+        // Arrange
+        Grupo grupo;
+        String codigo = "1";
+        String actividad = "Baloncesto";
+        int nplazas = 40;
+        int matriculados = 10;
+        double tarifa = 20.0;
+        int expected = 0;
+        int output;
+
+        // Act 
+        grupo = new Grupo(codigo, actividad, nplazas, matriculados, tarifa);
+        cd.anyadirActividad(grupo);
+        output = cd.plazasLibres("Surf");
+
+        // Assert
+        assertEquals(expected, output);
+
+    }
+
 
 }
