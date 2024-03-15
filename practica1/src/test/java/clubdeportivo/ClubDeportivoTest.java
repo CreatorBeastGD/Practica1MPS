@@ -22,7 +22,7 @@ public class ClubDeportivoTest
 
     @Test
     @DisplayName("Si al construir un club deportivo se introduce como gruposLenght un número negativo se debe lanza una excepción")
-    public void GruposNegativeLenghtThrowsException()
+    public void ClubConTamañoArrayGruposNegativaEsIncorrecto()
     {
         // Arrange
         String nombre = "Málaga";
@@ -37,12 +37,9 @@ public class ClubDeportivoTest
         assertThrows(expected, input, expectedMsg);
     }
 
-    /**
-     * Si al construir un club deportivo se introduce como gruposLenght un
-     * cero se debe lanza una excepción
-     */
     @Test
-    public void GruposZeroLenghtThrowsException()
+    @DisplayName("Si al construir un club deportivo se introduce como gruposLenght un cero se debe lanza una excepción")
+    public void ClubConTamañoArrayGruposCeroEsIncorrecto()
     {
         // Arrange
         String nombre = "Málaga";
@@ -57,11 +54,9 @@ public class ClubDeportivoTest
         assertThrows(expected, input, expectedMsg);
     }
 
-    /**
-     * Añadir un grupo nulo al club lanza una excepción
-     */
     @Test 
-    public void AnyadirGrupoNullThrowsException()
+    @DisplayName("Añadir un grupo nulo al club lanza una excepción")
+    public void AnyadirGrupoNuloEsIncorrecto()
     {
         // Arrange
         Grupo grupo = null;
@@ -79,11 +74,8 @@ public class ClubDeportivoTest
         assertEquals(expected2, output);
     }
 
-    /**
-     * Añadir un grupo que no estaba en la lista de grupos
-     * del club debe añadirlo al final de la lista
-     */
     @Test
+    @DisplayName("Añadir un grupo que no estaba en la lista de grupos del club debe añadirlo al final de la lista")
     public void AnyadirGrupoNuevoConExitoTest() throws ClubException
     {
         // Arrange
@@ -106,11 +98,8 @@ public class ClubDeportivoTest
         assertEquals(expected, output);
     }
 
-    /**
-     * Añadir un grupo al club teniendo grupos 
-     * ya insertados añadirá este al final de la lista
-     */
     @Test
+    @DisplayName("Añadir un grupo al club teniendo grupos ya insertados añadirá este al final de la lista")
     public void AnyadirVariosGruposNuevosConExitoTest() throws ClubException
     {
         // Arrange
@@ -145,11 +134,8 @@ public class ClubDeportivoTest
         assertEquals(expected, output);
     }
 
-    /**
-     * Añadir un grupo que ya existe en el club
-     * tan solo actualiza las plazas de este
-     */
     @Test
+    @DisplayName("Añadir un grupo que ya existe en el club tan solo actualiza las plazas de este")
     public void AnyadirGrupoExistenteActualizaPlazas() throws ClubException
     {
         // Arrange
@@ -177,11 +163,8 @@ public class ClubDeportivoTest
         assertEquals(expected, output);
     }
 
-    /**
-    * Añadir al club un grupo mediante el pase de datos
-    * correctos en un array de Strings y que este se añada correctamente
-    */
     @Test
+    @DisplayName("Añadir al club un grupo mediante el pase de datos correctos en un array de Strings y que este se añada correctamente")
     public void AnyadirGrupoMedianteArrayDatosConExitoTest() throws ClubException
     {
         // Arrange
@@ -198,12 +181,8 @@ public class ClubDeportivoTest
 
     }
 
-    /**
-     * Añadir al club un grupo mediante el pase de datos
-     * en un array de Strings pero que el dato nplazas no sea 
-     * un número debe lanzar una expeción
-     */
     @Test
+    @DisplayName("Añadir al club un grupo mediante el pase de datos en un array de Strings pero que el dato nplazas no sea un número debe lanzar una expeción")
     public void AnyadirGrupoMedianteArrayDatosConIncorrectoArgumentoNPlazas()
     {
         // Arrange
@@ -218,12 +197,8 @@ public class ClubDeportivoTest
         assertThrows(expected, input, expectedMsg);
     }
 
-    /**
-     * Añadir al club un grupo mediante el pase de datos
-     * en un array de Strings pero que el dato matriculados no sea 
-     * un número debe lanzar una expeción
-     */
     @Test
+    @DisplayName("Añadir al club un grupo mediante el pase de datos en un array de Strings pero que el dato matriculados no sea un número debe lanzar una expeción")
     public void AnyadirGrupoMedianteArrayDatosConIncorrectoArgumentoMatriculados()
     {
         // Arrange
@@ -238,12 +213,8 @@ public class ClubDeportivoTest
         assertThrows(expected, input, expectedMsg);
     }
 
-    /**
-     * Añadir al club un grupo mediante el pase de datos
-     * en un array de Strings pero que el dato nplazas no sea 
-     * un número debe lanzar una expeción
-     */
     @Test
+    @DisplayName("Añadir al club un grupo mediante el pase de datos en un array de Strings pero que el dato nplazas no sea un número debe lanzar una expeción")
     public void AnyadirGrupoMedianteArrayDatosConIncorrectoArgumentoTarifa()
     {
         // Arrange
@@ -258,11 +229,8 @@ public class ClubDeportivoTest
         assertThrows(expected, input, expectedMsg);
     }
 
-    /**
-     * Un club sin grupos devolverá cero si 
-     * se consulta las plazas libres de lo que sea
-     */
     @Test
+    @DisplayName("Un club sin grupos devolverá cero si se consulta las plazas libres de lo que sea")
     public void ClubSinGruposImplicaCeroPlazasLibres()
     {
         // Arrange
@@ -277,11 +245,8 @@ public class ClubDeportivoTest
 
     }
 
-    /**
-     * Consultar las plazas libres de un actividad
-     * que no tiene un club devuelve cero
-     */
     @Test
+    @DisplayName("Consultar las plazas libres de un actividad que no tiene un club devuelve cero")
     public void ActividadConsultadaQueNoTieneElClubImplicaCeroPlazasLibres() throws ClubException
     {
         // Arrange
@@ -303,11 +268,8 @@ public class ClubDeportivoTest
         assertEquals(expected, output);
     }
 
-    /**
-     * Si se consulta una ctividad que el club posee,
-     * se devolverán el número de plazas libres que tiene
-     */
     @Test
+    @DisplayName("Si se consulta una actividad (grupo) que el club posee, se devolverán el número de plazas libres que tiene")
     public void ActividadConsultadaDevuelvePlazasLibresConExitoTest() throws ClubException
     {
         // Arrange
@@ -330,13 +292,48 @@ public class ClubDeportivoTest
         assertEquals(expected, output);
     }
 
-    /**
-     * 
-     */
     @Test
-    public void ObtenerIngresosConExitoTest()
+    @DisplayName("Llamar a la función ingresos devolverá las ganancias entre todos los grupos que hay en el club")
+    public void ObtenerIngresosConExitoTest() throws ClubException
     {
+        //Arrange
+        Grupo[] grupos = {null, null, null};
+        String[] codigos = {"1", "2", "3"};
+        String[] actividades = {"Baloncesto", "Pintura", "Danza"};
+        int[] nplazas = {40, 20, 30};
+        int[] matriculados = {10, 12, 20};
+        double[] tarifas = {10.0, 15.5, 12.8};
 
+        double expected = 542.0;
+        double output;
+
+        // Act
+        for(int i=0; i<grupos.length; i++)
+        {
+            grupos[i] = new Grupo(codigos[i], actividades[i], nplazas[i], matriculados[i], tarifas[i]);
+            cd.anyadirActividad(grupos[i]);
+        }
+
+        output = cd.ingresos();
+
+        // Assert
+        assertEquals(expected, output, 0.0001);
+
+    }
+
+    @Test
+    @DisplayName("Llamar a la función ingresos de un club sin grupos devolverá cero")
+    public void ObtenerIngresosClubSinGruposDevuelveCero()
+    {
+        // Arrange
+        double expected = 0.0;
+        double output;
+
+        // Act 
+        output = cd.ingresos();
+
+        // Assert
+        assertEquals(expected, output, 0);
     }
 
 }
