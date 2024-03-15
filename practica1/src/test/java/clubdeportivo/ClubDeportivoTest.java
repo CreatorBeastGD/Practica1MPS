@@ -182,7 +182,7 @@ public class ClubDeportivoTest
     }
 
     @Test
-    @DisplayName("Añadir al club un grupo mediante el pase de datos en un array de Strings pero que el dato nplazas no sea un número debe lanzar una expeción")
+    @DisplayName("Añadir al club un grupo mediante el pase de datos en un array de Strings pero que el dato `nplazas` no sea un número debe lanzar una expeción")
     public void AnyadirGrupoMedianteArrayDatosConIncorrectoArgumentoNPlazas()
     {
         // Arrange
@@ -198,7 +198,7 @@ public class ClubDeportivoTest
     }
 
     @Test
-    @DisplayName("Añadir al club un grupo mediante el pase de datos en un array de Strings pero que el dato matriculados no sea un número debe lanzar una expeción")
+    @DisplayName("Añadir al club un grupo mediante el pase de datos en un array de Strings pero que el dato `matriculados` no sea un número debe lanzar una expeción")
     public void AnyadirGrupoMedianteArrayDatosConIncorrectoArgumentoMatriculados()
     {
         // Arrange
@@ -214,7 +214,7 @@ public class ClubDeportivoTest
     }
 
     @Test
-    @DisplayName("Añadir al club un grupo mediante el pase de datos en un array de Strings pero que el dato nplazas no sea un número debe lanzar una expeción")
+    @DisplayName("Añadir al club un grupo mediante el pase de datos en un array de Strings pero que el dato `tarifa` no sea un número debe lanzar una expeción")
     public void AnyadirGrupoMedianteArrayDatosConIncorrectoArgumentoTarifa()
     {
         // Arrange
@@ -229,6 +229,118 @@ public class ClubDeportivoTest
         assertThrows(expected, input, expectedMsg);
     }
 
+    @Test
+    @DisplayName("Añadir al club un grupo mediante el pase de datos en un array de Strings pero que el dato `matriculados` sea mayor a `nplazas` debe lanzar un excepción")
+    public void AnyadirGrupoMedianteArrayDatosConMatriculadosMayorNPlazasEsIncorrecto()
+    {
+        // Arrange
+        String[] datos = {"1", "Baloncesto", "40", "45", "20.0"};
+        Class<ClubException> expected = ClubException.class;
+        String expectedMsg = "ERROR: El número de plazas es menor que el de matriculados.";
+
+        // Act
+        Executable input = () -> cd.anyadirActividad(datos);
+        
+        // Assert
+        assertThrows(expected, input, expectedMsg);
+    }
+
+    @Test
+    @DisplayName("Añadir al club un grupo mediante el pase de datos en un array de Strings pero que el dato `nplazas` sea negativo debe lanzar un excepción")
+    public void AnyadirGrupoMedianteArrayDatosConArgumentoNPlazasNegativoEsIncorrecto()
+    {
+        // Arrange
+        String[] datos = {"1", "Baloncesto", "-40", "10", "20.0"};
+        Class<ClubException> expected = ClubException.class;
+        String expectedMsg = "ERROR: los datos numéricos no pueden ser menores o iguales que 0.";
+
+        // Act
+        Executable input = () -> cd.anyadirActividad(datos);
+        
+        // Assert
+        assertThrows(expected, input, expectedMsg);
+    }
+
+    @Test
+    @DisplayName("Añadir al club un grupo mediante el pase de datos en un array de Strings pero que el dato `matriculados` sea negativo debe lanzar un excepción")
+    public void AnyadirGrupoMedianteArrayDatosConArgumentoMatriculadosNegativoEsIncorrecto()
+    {
+        // Arrange
+        String[] datos = {"1", "Baloncesto", "40", "-10", "20.0"};
+        Class<ClubException> expected = ClubException.class;
+        String expectedMsg = "ERROR: los datos numéricos no pueden ser menores o iguales que 0.";
+
+        // Act
+        Executable input = () -> cd.anyadirActividad(datos);
+        
+        // Assert
+        assertThrows(expected, input, expectedMsg);
+    }
+
+    @Test
+    @DisplayName("Añadir al club un grupo mediante el pase de datos en un array de Strings pero que el dato `tarifa` sea negativo debe lanzar un excepción")
+    public void AnyadirGrupoMedianteArrayDatosConArgumentoTarifaNegativoEsIncorrecto()
+    {
+        // Arrange
+        String[] datos = {"1", "Baloncesto", "40", "10", "-20.0"};
+        Class<ClubException> expected = ClubException.class;
+        String expectedMsg = "ERROR: los datos numéricos no pueden ser menores o iguales que 0.";
+
+        // Act
+        Executable input = () -> cd.anyadirActividad(datos);
+        
+        // Assert
+        assertThrows(expected, input, expectedMsg);
+    }
+
+    @Test
+    @DisplayName("Añadir al club un grupo mediante el pase de datos en un array de Strings pero que el dato `nplazas` sea cero debe lanzar un excepción")
+    public void AnyadirGrupoMedianteArrayDatosConArgumentoNPlazasCeroEsIncorrecto()
+    {
+        // Arrange
+        String[] datos = {"1", "Baloncesto", "0", "10", "20.0"};
+        Class<ClubException> expected = ClubException.class;
+        String expectedMsg = "ERROR: los datos numéricos no pueden ser menores o iguales que 0.";
+
+        // Act
+        Executable input = () -> cd.anyadirActividad(datos);
+        
+        // Assert
+        assertThrows(expected, input, expectedMsg);
+    }
+
+    @Test
+    @DisplayName("Añadir al club un grupo mediante el pase de datos en un array de Strings pero que el dato `tarifa` sea cero debe lanzar un excepción")
+    public void AnyadirGrupoMedianteArrayDatosConArgumentoTarifaCeroEsIncorrecto()
+    {
+        // Arrange
+        String[] datos = {"1", "Baloncesto", "40", "10", "0"};
+        Class<ClubException> expected = ClubException.class;
+        String expectedMsg = "ERROR: los datos numéricos no pueden ser menores o iguales que 0.";
+
+        // Act
+        Executable input = () -> cd.anyadirActividad(datos);
+        
+        // Assert
+        assertThrows(expected, input, expectedMsg);
+    }
+
+    @Test
+    @DisplayName("Añadir al club un grupo mediante el pase de datos en un array de Strings pero que el dato `matriculados` sea cero debe poder añadirse con éxito")
+    public void AnyadirGrupoMedianteArrayDatosConArgumentoMatriculadosCeroConExitoTest() throws ClubException
+    {
+        // Arrange
+        String[] datos = {"1", "Baloncesto", "40", "0", "20.0"};
+        String output, expected = "Málaga --> [ (1 - Baloncesto - 20.0 euros - P:40 - M:0) ]";
+
+        // Act
+        cd.anyadirActividad(datos);
+        output = cd.toString();
+        
+        // Assert
+        assertEquals(expected, output);
+    }
+    
     @Test
     @DisplayName("Un club sin grupos devolverá cero si se consulta las plazas libres de lo que sea")
     public void ClubSinGruposImplicaCeroPlazasLibres()
@@ -335,5 +447,7 @@ public class ClubDeportivoTest
         // Assert
         assertEquals(expected, output, 0);
     }
+
+
 
 }
