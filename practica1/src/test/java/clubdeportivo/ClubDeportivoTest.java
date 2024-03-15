@@ -2,6 +2,7 @@ package clubdeportivo;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
@@ -10,10 +11,8 @@ public class ClubDeportivoTest
 
     ClubDeportivo cd;
 
-    /**
-     * Se inicializa el club deportivo que se usará en la mayoría de test
-     */
     @BeforeEach
+    @DisplayName("Se inicializa el club deportivo que se usará en la mayoría de test")
     public void setup() throws ClubException
     {
         // Arrange
@@ -21,11 +20,8 @@ public class ClubDeportivoTest
         cd = new ClubDeportivo(nombre);
     }
 
-    /**
-     * Si al construir un club deportivo se introduce como gruposLenght un
-     * número negativo se debe lanza una excepción
-     */
     @Test
+    @DisplayName("Si al construir un club deportivo se introduce como gruposLenght un número negativo se debe lanza una excepción")
     public void GruposNegativeLenghtThrowsException()
     {
         // Arrange
@@ -104,6 +100,45 @@ public class ClubDeportivoTest
         grupo = new Grupo(codigo, actividad, nplazas, matriculados, tarifa);
         expected = "Málaga --> [ " + grupo.toString() + " ]";
         cd.anyadirActividad(grupo);
+        output = cd.toString();
+
+        // Assert
+        assertEquals(expected, output);
+    }
+
+    /**
+     * Añadir un grupo al club teniendo grupos 
+     * ya insertados añadirá este al final de la lista
+     */
+    @Test
+    public void AnyadirVariosGruposNuevosConExitoTest() throws ClubException
+    {
+        // Arrange
+        Grupo grupo1;
+        String codigo1 = "1";
+        String actividad1 = "Baloncesto";
+        int nplazas1 = 40;
+        int matriculados1 = 10;
+        double tarifa1 = 20.0;
+
+        Grupo grupo2;
+        String codigo2 = "2";
+        String actividad2 = "Béisbol";
+        int nplazas2 = 50;
+        int matriculados2 = 30;
+        double tarifa2 = 30.0;
+
+        String output;
+        String expected;
+
+        // Act
+        grupo1 = new Grupo(codigo1, actividad1, nplazas1, matriculados1, tarifa1);
+        grupo2 = new Grupo(codigo2, actividad2, nplazas2, matriculados2, tarifa2);
+
+        cd.anyadirActividad(grupo1);
+        cd.anyadirActividad(grupo2);
+
+        expected = "Málaga --> [ " + grupo1.toString() + ", " + grupo2.toString() + " ]";
         output = cd.toString();
 
         // Assert
@@ -245,10 +280,9 @@ public class ClubDeportivoTest
     /**
      * Consultar las plazas libres de un actividad
      * que no tiene un club devuelve cero
-     * @throws ClubException 
      */
     @Test
-    public void ActividadConsultadaQueNoTieneELClubImplicaCeroPlazasLibres() throws ClubException
+    public void ActividadConsultadaQueNoTieneElClubImplicaCeroPlazasLibres() throws ClubException
     {
         // Arrange
         Grupo grupo;
@@ -267,8 +301,42 @@ public class ClubDeportivoTest
 
         // Assert
         assertEquals(expected, output);
-
     }
 
+    /**
+     * Si se consulta una ctividad que el club posee,
+     * se devolverán el número de plazas libres que tiene
+     */
+    @Test
+    public void ActividadConsultadaDevuelvePlazasLibresConExitoTest() throws ClubException
+    {
+        // Arrange
+        Grupo grupo;
+        String codigo = "1";
+        String actividad = "Baloncesto";
+        int nplazas = 40;
+        int matriculados = 10;
+        double tarifa = 20.0;
+
+        int expected = nplazas - matriculados;
+        int output;
+
+        // Act 
+        grupo = new Grupo(codigo, actividad, nplazas, matriculados, tarifa);
+        cd.anyadirActividad(grupo);
+        output = cd.plazasLibres("Baloncesto");
+
+        // Assert
+        assertEquals(expected, output);
+    }
+
+    /**
+     * 
+     */
+    @Test
+    public void ObtenerIngresosConExitoTest()
+    {
+
+    }
 
 }
