@@ -311,7 +311,7 @@ public class GrupoTest {
     }
 
     @Test
-    @DisplayName("Hacer equals sobre dos grupos con mismos datos deberia ser correcto")
+    @DisplayName("Hacer equals sobre dos grupos con mismos datos deberia devolver true")
     public void EqualsTwoGrupoWithSameDataIsCorrect() throws ClubException {
         // Arrange
         String codigo = "Prueba";
@@ -329,7 +329,7 @@ public class GrupoTest {
     }
 
     @Test
-    @DisplayName("Hacer equals sobre dos grupos con diferentes datos deberia ser correcto")
+    @DisplayName("Hacer equals sobre dos grupos con diferentes datos deberia devolver falso")
     public void EqualsTwoGrupoWithDifferentCodeIsFalse() throws ClubException {
         // Arrange
         String codigo = "Prueba";
@@ -348,7 +348,7 @@ public class GrupoTest {
     }
 
     @Test
-    @DisplayName("Hacer equals sobre dos grupos con diferentes datos deberia ser correcto")
+    @DisplayName("Hacer equals sobre dos grupos con diferentes datos deberia devolver falso")
     public void EqualsTwoGrupoWithDifferentDataIsFalse() throws ClubException {
         // Arrange
         String codigo = "Prueba";
@@ -369,7 +369,7 @@ public class GrupoTest {
     }
 
     @Test
-    @DisplayName("Hacer equals sobre dos grupos con diferentes actividades deberia ser correcto")
+    @DisplayName("Hacer equals sobre dos grupos con diferentes actividades deberia devolver falso")
     public void EqualsTwoGrupoWithDifferentActivityIsFalse() throws ClubException {
         // Arrange
         String codigo = "Prueba";
@@ -421,7 +421,7 @@ public class GrupoTest {
     }
 
     @Test
-    @DisplayName("Hacer equals sobre dos grupos con mismos datos pero con diferentes caps deberia ser correcto")
+    @DisplayName("Hacer equals sobre distintos objetos deberia devolver falso")
     public void EqualsTwoGrupoWithDifferentObjectReturnFalse() throws ClubException {
         // Arrange
         String codigo = "Prueba";
