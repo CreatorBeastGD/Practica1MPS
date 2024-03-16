@@ -74,19 +74,27 @@ public class ClubDeportivo {
 	}
 
 	public void matricular(String actividad, int npersonas) throws ClubException {
+
 		int plazas = plazasLibres(actividad);
 		if (plazas < npersonas) {
-			throw new ClubException("ERROR: no hay suficientes plazas libres para esa actividad en el club.");
+			throw new ClubException("ERROR: no hay suficientes plazas libres para esa actividad en el club o no tiene esa actividad registrada.");
 		}
+
 		int i = 0;
 		while (i < ngrupos && npersonas > 0) {
+
 			if (actividad.equals(grupos[i].getActividad())) {
+
 				int plazasGrupo = grupos[i].plazasLibres();
+
 				if (npersonas >= plazasGrupo) {
 					grupos[i].matricular(plazasGrupo);
 					npersonas -= plazasGrupo;
-				} else {
+				} 
+				else {
 					grupos[i].matricular(npersonas);
+					// Error corregido, en esta rama ya no quedan personas matriculadas y hay que indicarlo
+					npersonas = 0;
 				}
 			}
 			i++;

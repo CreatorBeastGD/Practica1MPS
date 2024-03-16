@@ -381,7 +381,7 @@ public class ClubDeportivoTest
     }
 
     @Test
-    @DisplayName("Si se consulta una actividad (grupo) que el club posee, se devolverán el número de plazas libres que tiene")
+    @DisplayName("Si se consulta una actividad que el club posee, se devolverán el número de plazas libres que tiene")
     public void ActividadConsultadaDevuelvePlazasLibresConExitoTest() throws ClubException
     {
         // Arrange
@@ -398,6 +398,34 @@ public class ClubDeportivoTest
         // Act 
         grupo = new Grupo(codigo, actividad, nplazas, matriculados, tarifa);
         cd.anyadirActividad(grupo);
+        output = cd.plazasLibres("Baloncesto");
+
+        // Assert
+        assertEquals(expected, output);
+    }
+
+    @Test
+    @DisplayName("Si se consulta una actividad que el club posee y tiene más de un grupo con esa actividad, se devolverán la suma de las plazas libres de todos esos grupos")
+    public void ActividadConsultadaDevuelvePlazasLibresHabiendoVariosGruposConExitoTest() throws ClubException
+    {
+        //Arrange
+        Grupo[] grupos = {null, null, null, null};
+        String[] codigos = {"1", "2", "3", "4"};
+        String[] actividades = {"Baloncesto", "Baloncesto", "Baloncesto", "Surf"};
+        int[] nplazas = {40, 20, 30, 30};
+        int[] matriculados = {10, 12, 20, 20};
+        double[] tarifas = {10.0, 15.5, 12.8, 30.0};
+    
+        int expected = 48;
+        int output;
+
+        // Act
+        for(int i=0; i<grupos.length; i++)
+        {
+            grupos[i] = new Grupo(codigos[i], actividades[i], nplazas[i], matriculados[i], tarifas[i]);
+            cd.anyadirActividad(grupos[i]);
+        }
+
         output = cd.plazasLibres("Baloncesto");
 
         // Assert
@@ -448,6 +476,56 @@ public class ClubDeportivoTest
         assertEquals(expected, output, 0);
     }
 
+    @Test
+    @DisplayName("Matricular más personas que las plazas disponibles en una actividad del club saltará una excepción")
+    public void MatricularMasQuePlazasDisponibles() throws ClubException
+    {
+        // Arrange
+        Grupo grupo;
+        String codigo = "1";
+        String actividad = "Baloncesto";
+        int nplazas = 40;
+        int matriculados = 10;
+        double tarifa = 20.0;
+
+        int nuevosMatriculados = 45; // 10 + 45 > 40
+        Class<ClubException> expected = ClubException.class;
+        String expectedMsg = "ERROR: no hay suficientes plazas libres para esa actividad en el club o no tiene esa actividad registrada.";
+
+        // Act
+        grupo = new Grupo(codigo, actividad, nplazas, matriculados, tarifa);
+        cd.anyadirActividad(grupo);
+        Executable input = () -> cd.matricular(actividad, nuevosMatriculados);
+
+        // Assert
+        assertThrows(expected, input, expectedMsg);
+
+    }
+
+    @Test
+    @DisplayName("Matricular personas a una actividad del club con éxito y no sobrando plazas libres")
+    public void MatricularJustoLasPlazasDisponiblesConExito() throws ClubException
+    {
+        // Arrange
+        Grupo grupo;
+        String codigo = "1";
+        String actividad = "Baloncesto";
+        int nplazas = 40;
+        int matriculados = 10;
+        double tarifa = 20.0;
+
+        String output, expected = "Málaga --> [ (1 - Baloncesto - 20.0 euros - P:40 - M:40) ]";
+
+        // Act
+        grupo = new Grupo(codigo, actividad, nplazas, matriculados, tarifa);
+        cd.anyadirActividad(grupo);
+        cd.matricular("Baloncesto", 30);
+        output = cd.toString();
+
+        // Assert
+        assertEquals(expected, output);
+ 
+    }
 
 
 }
