@@ -340,6 +340,22 @@ public class ClubDeportivoTest
         // Assert
         assertEquals(expected, output);
     }
+
+    @Test
+    @DisplayName("Añadir al club un grupo mediante el pase de datos en un array de Strings pero faltan datos en el array (su lenght es menor a 5)")
+    public void AnyadirGrupoMedianteArrayDatosConFaltaDeArgumentosEsIncorrecto()
+    {
+        // Arrange
+        String[] datos = {"1", "Baloncesto", "40"};
+        Class<ClubException> expected = ClubException.class;
+        String expectedMsg = "ERROR: falta de argumentos en el array de datos";
+
+        // Act
+        Executable input = () -> cd.anyadirActividad(datos);
+        
+        // Assert
+        assertThrows(expected, input, expectedMsg);
+    }
     
     @Test
     @DisplayName("Un club sin grupos devolverá cero si se consulta las plazas libres de lo que sea")
@@ -520,6 +536,60 @@ public class ClubDeportivoTest
         grupo = new Grupo(codigo, actividad, nplazas, matriculados, tarifa);
         cd.anyadirActividad(grupo);
         cd.matricular("Baloncesto", 30);
+        output = cd.toString();
+
+        // Assert
+        assertEquals(expected, output);
+ 
+    }
+
+    @Test
+    @DisplayName("Matricular personas a una actividad del club con éxito y que sobren plazas libres")
+    public void MatricularPlazasDisponiblesYQueSobrenConExito() throws ClubException
+    {
+        // Arrange
+        Grupo grupo;
+        String codigo = "1";
+        String actividad = "Baloncesto";
+        int nplazas = 40;
+        int matriculados = 0;
+        double tarifa = 20.0;
+
+        String output, expected = "Málaga --> [ (1 - Baloncesto - 20.0 euros - P:40 - M:30) ]";
+
+        // Act
+        grupo = new Grupo(codigo, actividad, nplazas, matriculados, tarifa);
+        cd.anyadirActividad(grupo);
+        cd.matricular("Baloncesto", 30);
+        output = cd.toString();
+
+        // Assert
+        assertEquals(expected, output);
+ 
+    }
+
+    @Test
+    @DisplayName("Matricular personas a una actividad del club con éxito y que haya varios grupos de esa actividad")
+    public void MatricularPlazasDisponiblesHabiendoVariosGruposMismaActividadConExito() throws ClubException
+    {
+        // Arrange
+        Grupo[] grupos = {null, null, null};
+        String[] codigos = {"1", "2", "3"};
+        String[] actividades = {"Baloncesto", "Danza", "Baloncesto"};
+        int[] nplazas = {40, 20, 30};
+        int[] matriculados = {10, 12, 20};
+        double[] tarifas = {10.0, 15.5, 12.8};
+
+        String output, expected = "Málaga --> [ (1 - Baloncesto - 10.0 euros - P:40 - M:40), (2 - Danza - 15.5 euros - P:20 - M:12), (3 - Baloncesto - 12.8 euros - P:30 - M:25) ]";
+
+        // Act
+        for(int i=0; i<grupos.length; i++)
+        {
+            grupos[i] = new Grupo(codigos[i], actividades[i], nplazas[i], matriculados[i], tarifas[i]);
+            cd.anyadirActividad(grupos[i]);
+        }
+        
+        cd.matricular("Baloncesto", 35);
         output = cd.toString();
 
         // Assert
