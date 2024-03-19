@@ -38,20 +38,30 @@ public class ClubDeportivo {
 			double tarifa = Double.parseDouble(datos[4]);
 			Grupo g = new Grupo(datos[0], datos[1], plazas, matriculados, tarifa);
 			anyadirActividad(g);
-		} catch (NumberFormatException e) {
+		} 
+		catch (NumberFormatException e) {
 			throw new ClubException("ERROR: formato de número incorrecto");
 		}
+		catch (ArrayIndexOutOfBoundsException e) {
+			throw new ClubException("ERROR: falta de argumentos en el array de datos");
+		}
+		
 	}
 
 	public void anyadirActividad(Grupo g) throws ClubException {
+
 		if (g==null){ // ADDME: anaydido para comprobar los grupos nulos
 			throw new ClubException("ERROR: el grupo es nulo");
 		}
+
 		int pos = buscar(g);
-		if (pos == -1) { // El grupo es nuevo
+		if (pos == -1) 
+		{ // El grupo es nuevo
 			grupos[ngrupos] = g;
 			ngrupos++;
-		} else { // El grupo ya existe --> modificamos las plazas
+		} 
+		else 
+		{ // El grupo ya existe --> modificamos las plazas
 			grupos[pos].actualizarPlazas(g.getPlazas());
 		}
 	}
@@ -69,19 +79,27 @@ public class ClubDeportivo {
 	}
 
 	public void matricular(String actividad, int npersonas) throws ClubException {
+
 		int plazas = plazasLibres(actividad);
 		if (plazas < npersonas) {
-			throw new ClubException("ERROR: no hay suficientes plazas libres para esa actividad en el club.");
+			throw new ClubException("ERROR: no hay suficientes plazas libres para esa actividad en el club o no tiene esa actividad registrada.");
 		}
+
 		int i = 0;
 		while (i < ngrupos && npersonas > 0) {
+
 			if (actividad.equals(grupos[i].getActividad())) {
+
 				int plazasGrupo = grupos[i].plazasLibres();
+
 				if (npersonas >= plazasGrupo) {
 					grupos[i].matricular(plazasGrupo);
 					npersonas -= plazasGrupo;
-				} else {
+				} 
+				else {
 					grupos[i].matricular(npersonas);
+					// Error corregido, en esta rama ya no quedan personas matriculadas y hay que indicarlo
+					npersonas = 0;
 				}
 			}
 			i++;
