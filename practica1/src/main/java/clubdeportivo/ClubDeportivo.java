@@ -42,6 +42,7 @@ public class ClubDeportivo {
 		catch (NumberFormatException e) {
 			throw new ClubException("ERROR: formato de número incorrecto");
 		}
+		// Corrección: catch añadido
 		catch (ArrayIndexOutOfBoundsException e) {
 			throw new ClubException("ERROR: falta de argumentos en el array de datos");
 		}
@@ -85,6 +86,11 @@ public class ClubDeportivo {
 			throw new ClubException("ERROR: no hay suficientes plazas libres para esa actividad en el club o no tiene esa actividad registrada.");
 		}
 
+		// Corrección
+		if (npersonas<=0) {
+			throw new ClubException("ERROR: El numero de matrículas nuevas no puede ser negativo o nulo.");
+		}
+
 		int i = 0;
 		while (i < ngrupos && npersonas > 0) {
 
@@ -98,7 +104,7 @@ public class ClubDeportivo {
 				} 
 				else {
 					grupos[i].matricular(npersonas);
-					// Error corregido, en esta rama ya no quedan personas matriculadas y hay que indicarlo
+					// Corrección
 					npersonas = 0;
 				}
 			}
