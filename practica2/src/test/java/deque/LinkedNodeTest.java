@@ -1,4 +1,4 @@
-package src.test.java.deque;
+package deque;
 
 public class LinkedNodeTest {
     

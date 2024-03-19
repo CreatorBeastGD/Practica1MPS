@@ -1,4 +1,4 @@
-package src.main.java.deque;
+package deque;
 
 public class DoubleLinkedQueueException extends RuntimeException {
     public DoubleLinkedQueueException(String message) {
