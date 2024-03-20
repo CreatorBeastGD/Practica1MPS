@@ -15,6 +15,19 @@
 		<!--<maven.compiler.target>${maven.compiler.source}</maven.compiler.target>-->
 	</properties>
 
+	<!--Reutilizar versiones para las dependencias -->
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.junit</groupId>
+				<artifactId>junit-bom</artifactId>
+				<version>5.10.1</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
   <!--Dependencias de Maven -->
 	<dependencies>
 	<!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
