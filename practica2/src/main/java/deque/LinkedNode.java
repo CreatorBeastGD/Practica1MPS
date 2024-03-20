@@ -7,6 +7,7 @@ package deque;
  *
  * @param <T> the type of elements held in the deque.
  */
+
 class LinkedNode<T> {
     private T item;
     private LinkedNode<T> previous;
