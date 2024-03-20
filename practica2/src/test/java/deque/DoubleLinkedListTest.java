@@ -1,6 +1,7 @@
 package deque;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -229,7 +230,167 @@ public class DoubleLinkedListTest {
     @Nested
     @DisplayName("First Tests")
     class FirstTests {
+
+        @Test
+        @DisplayName("Obtener el primer nodo de una lista vacía lanza excepción")
+        public void GetFirstOnEmptyListThrowsException()
+        {
+            // Arrange
+            Class<DoubleLinkedQueueException> expected = DoubleLinkedQueueException.class;
+            String expectedMsg = "[ERROR]: Empty deque";
+
+            // Act 
+            Executable input = () -> dll.first();
+
+            // Assert
+            assertThrows(expected, input, expectedMsg);
+        }
+
+        @Test
+        @DisplayName("Obtener el primer nodo de una lista no vacía")
+        public void GetFirstOnNotEmptyList()
+        {
+            // Arrange
+            Integer value1 = 1,
+                    value2 = 2,
+                    value3 = 3, output,
+                    expected = 3;
+
+            // Act
+            dll.append(value3);
+            dll.append(value2);
+            dll.append(value1);
+            output = dll.first();
+
+            // Assert
+            assertEquals(expected, output);
+        }
+    }
+
+
+    @Nested
+    @DisplayName("Last Tests")
+    class LastTests {
+
+        @Test
+        @DisplayName("Obtener el último nodo de una lista vacía lanza excepción")
+        public void GetLastOnEmptyListThrowsException()
+        {
+            // Arrange
+            Class<DoubleLinkedQueueException> expected = DoubleLinkedQueueException.class;
+            String expectedMsg = "[ERROR]: Empty deque";
+
+            // Act 
+            Executable input = () -> dll.last();
+
+            // Assert
+            assertThrows(expected, input, expectedMsg);
+        }
+
+        @Test
+        @DisplayName("Obtener el último nodo de una lista no vacía")
+        public void GetLastOnNotEmptyList()
+        {
+            // Arrange
+            Integer value1 = 1,
+                    value2 = 2,
+                    value3 = 3, output,
+                    expected = 1;
+
+            // Act
+            dll.append(value3);
+            dll.append(value2);
+            dll.append(value1);
+            output = dll.last();
+
+            // Assert
+            assertEquals(expected, output);
+        }
+    }
+
+
+    @Nested
+    @DisplayName("Size Tests")
+    class SizeTests {
+
+        @Test 
+        @DisplayName("El tamaño de una lista vacía es cero")
+        public void GetSizeOnEmptyListIsZero()
+        {
+            // Arrange
+            Integer expected = 0, output;
+
+            // Act
+            output = dll.size();
+
+            // Assert
+            assertEquals(expected, output);
+        }
+
+        @Test
+        @DisplayName("El tamaño de una lista no vacía será del número de elementos añadidos")
+        public void GetSizeOnNotEmptyListIsNotZero()
+        {
+            // Arrange
+            Integer value1 = 1,
+                    value2 = 2,
+                    value3 = 3, 
+                    notExpected = 0, output;
+
+            // Act
+            dll.append(value1);
+            dll.append(value2);
+            dll.append(value3);
+            output = dll.size();
         
+            // Assert
+            assertNotEquals(notExpected, output);
+        }
+
+        @Test
+        @DisplayName("El tamaño de una lista tras eliminar todos sus elementos es cero")
+        public void GetSizeBeforeDeleteAllElementsIsZero()
+        {
+            // Arrange
+            Integer value1 = 1,
+                    value2 = 2,
+                    value3 = 3, 
+                    expected = 0, output;
+
+            // Act
+            dll.append(value1);
+            dll.append(value2);
+            dll.append(value3);
+            dll.deleteFirst();
+            dll.deleteFirst();
+            dll.deleteFirst();
+            output = dll.size();
+        
+            // Assert
+            assertEquals(expected, output);
+        }
+
+        @Test
+        @DisplayName("El tamaño de una lista tras eliminar no todos sus elementos no es cero")
+        public void GetSizeBeforeDeleteNotAllElementsIsNotZero()
+        {
+            // Arrange
+            Integer value1 = 1,
+                    value2 = 2,
+                    value3 = 3, 
+                    notExpected = 0, output;
+
+            // Act
+            dll.append(value1);
+            dll.append(value2);
+            dll.append(value3);
+            dll.deleteFirst();
+            dll.deleteFirst();
+            output = dll.size();
+        
+            // Assert
+            assertNotEquals(notExpected, output);
+        }
     }
 
 }
