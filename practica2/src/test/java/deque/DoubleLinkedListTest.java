@@ -111,4 +111,125 @@ public class DoubleLinkedListTest {
         }
     }
 
+
+    @Nested
+    @DisplayName("DeleteFirst Tests")
+    class DeleteFirstTests {
+
+        @Test
+        @DisplayName("Borrar el primer elemento en una lista vacía lanza excepción")
+        public void DeleteFirstOnEmptyListThrowsException() 
+        {
+            // Arrange
+            Class<DoubleLinkedQueueException> expected = DoubleLinkedQueueException.class;
+            String expectedMsg = "[ERROR]: Empty deque";
+
+            // Act
+            Executable input = () -> dll.deleteFirst();
+
+            // Assert
+            assertThrows(expected, input, expectedMsg);
+        }
+
+        @Test
+        @DisplayName("Borrar el primer elemento de una lista con un solo elemento la deja vacía")
+        public void DeleteFirstOnOneSizeListMakesItEmpty() 
+        {
+            // Arrange
+            Integer expectedSize = 0,
+                    value = 33,
+                    output;
+
+            // Act
+            dll.prepend(value);
+            dll.deleteFirst();
+            output = dll.size();
+
+            // Assert
+            assertEquals(expectedSize, output);
+        }
+
+        @Test
+        @DisplayName("Borrar el primer elemento de una lista con varios elementos causa que el segundo elemento sea el primero")
+        public void DeleteFirstOnNotEmptyListMakesSecondNodeFirst()
+        {
+            // Arrange
+            Integer value1 = 1, value2 = 2,
+                    expected = 2, output;
+            
+            // Act
+            dll.append(value1);
+            dll.append(value2);
+            dll.deleteFirst();
+            output = dll.first();
+
+            // Assert
+            assertEquals(expected, output);
+        }
+    }
+
+
+    @Nested
+    @DisplayName("DeleteLast Tests")
+    class DeleteLastTests {
+
+        @Test
+        @DisplayName("Borrar el último elemento en una lista vacía lanza excepción")
+        public void DeleteLastOnEmptyListThrowsException() 
+        {
+            // Arrange
+            Class<DoubleLinkedQueueException> expected = DoubleLinkedQueueException.class;
+            String expectedMsg = "[ERROR]: Empty deque";
+
+            // Act
+            Executable input = () -> dll.deleteLast();
+
+            // Assert
+            assertThrows(expected, input, expectedMsg);
+        }
+
+        @Test
+        @DisplayName("Borrar el último elemento de una lista con un solo elemento la deja vacía")
+        public void DeleteLastOnOneSizeListMakesItEmpty() 
+        {
+            // Arrange
+            Integer expectedSize = 0,
+                    value = 33,
+                    output;
+
+            // Act
+            dll.prepend(value);
+            dll.deleteLast();
+            output = dll.size();
+
+            // Assert
+            assertEquals(expectedSize, output);
+        }
+
+        @Test
+        @DisplayName("Borrar el último elemento de una lista con varios elementos causa que el penúltimo elemento sea el último")
+        public void DeleteLastOnNotEmptyListMakesBeforeLastNodeLast()
+        {
+            // Arrange
+            Integer value1 = 1, value2 = 2,
+                    expected = 1, output;
+            
+            // Act
+            dll.prepend(value2);
+            dll.prepend(value1);
+            dll.deleteLast();
+            output = dll.last();
+
+            // Assert
+            assertEquals(expected, output);
+        }
+    }
+
+
+    @Nested
+    @DisplayName("First Tests")
+    class FirstTests {
+        
+    }
+
 }
