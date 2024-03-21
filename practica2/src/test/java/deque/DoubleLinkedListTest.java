@@ -8,6 +8,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.function.Executable;
 
+/**
+ * @author1: Mario Cortés Herrera
+ * @author2: Javier Molina Colmenero
+ */
+
 public class DoubleLinkedListTest {
 
     DoubleLinkedList<Integer> dll;

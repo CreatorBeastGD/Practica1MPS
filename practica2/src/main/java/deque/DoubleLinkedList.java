@@ -112,25 +112,136 @@ public class DoubleLinkedList<T> implements DoubleLinkedQueue<T> {
 
     @Override
     public T get(int index) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'get'");
+        
+        if(index < 0 || index >= size())
+        {
+            throw new IndexOutOfBoundsException("ERROR: Índice introducido incorrecto");
+        }
+        
+        LinkedNode<T> node = first;
+        for(int i = index ; i > 0 ; i--) 
+        {
+            node = node.getNext();
+        }
+
+        return node.getItem();
     }
 
     @Override
     public boolean contains(T value) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'contains'");
+        LinkedNode<T> node = first;
+        boolean result = false;
+        
+        while(node != null && !result) {
+            result = node.getItem().equals(value);
+            node = node.getNext();
+        }
+
+        return result;
     }
 
     @Override
     public void remove(T value) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'remove'");
+        
+        if (contains(value)) 
+        {
+            LinkedNode<T> node = first;
+            boolean found = false;
+        
+            while(!found) 
+            {
+                found = node.getItem().equals(value);
+                
+                if (!found) 
+                {
+                    node = node.getNext();
+                }
+            }
+
+            if(size() == 1)
+            {
+                first = null;
+                last = null;
+            }
+            else 
+            {
+                if (!node.isFirstNode()) {
+                    node.getPrevious().setNext(node.getNext());
+                } 
+                else {
+                    node.getNext().setPrevious(null);
+                    first = node.getNext();
+                }
+    
+                if(!node.isLastNode()) {
+                    node.getNext().setPrevious(node.getPrevious());
+                }
+                else {
+                    node.getPrevious().setNext(null);
+                    last = node.getPrevious();
+                }
+            }
+            node.setNext(null);
+            node.setPrevious(null);
+            node = null;
+        }
     }
 
-    @Override
+
     public void sort(Comparator<? super T> comparator) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'sort'");
+
+        if(size() > 1)
+        {
+            LinkedNode<T> actual = first;
+            LinkedNode<T> next = actual.getNext();
+            int comparation;           
+
+            while(next != null)
+            {
+                comparation = comparator.compare(actual.getItem(), next.getItem());
+
+                if(comparation == 1) // actual > next
+                {
+                    next.setPrevious(actual.getPrevious()); // El anterior de next será ahora el anterior de actual
+                    actual.setNext(next.getNext()); // El siguiente de actual será ahora el siguiente de next
+                    
+                    actual.setPrevious(next); // anterior de actual es next
+                    next.setNext(actual); // siguiente de next es actual
+
+                    if(next.getPrevious() == null) // Si next ahora es el first
+                    {
+                        first = next;
+                    }
+
+                    if(actual.getNext() == null) // Si actual ahora es el last
+                    {
+                        last = actual;
+                    }
+                }
+
+                actual = next;
+                next = next.getNext();
+
+            }
+
+
+        }
     }
+
+
+    @Override
+    public String toString()
+    {
+        String values = "";
+        LinkedNode<T> nodo = first;
+
+        while(nodo != null)
+        {
+            values += " " + nodo.getItem();
+            nodo = nodo.getNext();
+        }
+
+        return values;
+    }
+
 }

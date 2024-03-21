@@ -10,6 +10,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+/**
+ * @author1: Mario Cortés Herrera
+ * @author2: Javier Molina Colmenero
+ */
+
 public class LinkedNodeTest {
     LinkedNode<Integer> node;
 
