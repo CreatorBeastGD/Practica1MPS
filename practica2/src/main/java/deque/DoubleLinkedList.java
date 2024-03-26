@@ -187,7 +187,7 @@ public class DoubleLinkedList<T> implements DoubleLinkedQueue<T> {
         }
     }
 
-
+    @Override
     public void sort(Comparator<? super T> comparator) {
         /* //   CODIGO MARIO
         if(size() > 1)
@@ -269,7 +269,7 @@ public class DoubleLinkedList<T> implements DoubleLinkedQueue<T> {
         }
     }
 
-
+    // CUANDO SE HAGAN LOS TEST, ESTO HAY QUE ELIMINARLO O COMENTARLO
     @Override
     public String toString()
     {
