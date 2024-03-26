@@ -54,4 +54,10 @@ class LinkedNode<T> {
     boolean isNotATerminalNode() {
         return !(isFirstNode() || isLastNode());
     }
+
+    @Override
+    public String toString() {
+        String toString = "LinkedNode: [ " + this.getItem().getClass().getSimpleName() + " : " + this.getItem() + " ]";
+        return toString; 
+    }
 }

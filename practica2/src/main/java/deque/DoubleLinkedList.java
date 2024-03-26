@@ -189,7 +189,7 @@ public class DoubleLinkedList<T> implements DoubleLinkedQueue<T> {
 
 
     public void sort(Comparator<? super T> comparator) {
-
+        /* //   CODIGO MARIO
         if(size() > 1)
         {
             LinkedNode<T> actual = first;
@@ -218,13 +218,54 @@ public class DoubleLinkedList<T> implements DoubleLinkedQueue<T> {
                         last = actual;
                     }
                 }
-
                 actual = next;
                 next = next.getNext();
-
             }
+        }
+        */
+        boolean swap = true;
 
+        while(swap)
+        {
+            swap = false;
+            LinkedNode<T> actual = first;
+            LinkedNode<T> next = actual.getNext();
+            int comparation;           
 
+            while(next != null)
+            {
+                comparation = comparator.compare(actual.getItem(), next.getItem());
+
+                if(comparation > 0) // actual > next
+                {
+                    // Realiza el intercambio de nodos
+                    swap = true;
+                    if (actual.getPrevious() != null) {
+                        actual.getPrevious().setNext(next);
+                    } else {
+                        first = next;
+                    }
+
+                    if (next.getNext() != null) {
+                        next.getNext().setPrevious(actual);
+                    } else {
+                        last = actual;
+                    }
+
+                    actual.setNext(next.getNext());
+                    next.setPrevious(actual.getPrevious());
+                    actual.setPrevious(next);
+                    next.setNext(actual);
+
+                    // Actualiza las referencias para la próxima iteración
+                    LinkedNode<T> temp = next;
+                    next = actual;
+                    actual = temp;
+
+                }
+                actual = next;
+                next = next.getNext();
+            }
         }
     }
 
@@ -232,16 +273,21 @@ public class DoubleLinkedList<T> implements DoubleLinkedQueue<T> {
     @Override
     public String toString()
     {
-        String values = "";
-        LinkedNode<T> nodo = first;
-
-        while(nodo != null)
-        {
-            values += " " + nodo.getItem();
-            nodo = nodo.getNext();
+        String toString = "DoubleLinkedList: [";
+        for (int i = 0 ; i < this.size() ; i++) {
+            Object x = this.get(i);
+            toString += x.toString();
+            if (i != this.size()-1) {
+                toString += ", ";
+            }
         }
+        toString += "]";
+        toString += "\n First:      " + this.first.toString();
+        toString += "\n Last:       " + this.last.toString();
+        toString += "\n Elements:   " + this.size();
 
-        return values;
+
+        return toString;
     }
 
 }
