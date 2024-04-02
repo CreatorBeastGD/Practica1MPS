@@ -2,6 +2,8 @@ package deque;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Comparator;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -510,6 +512,93 @@ public class DoubleLinkedListTest {
     @DisplayName("Contains Tests")
     class ContainsTests {
 
+        @Test
+        @DisplayName("Llamar a contains a una lista sin nodos da false")
+        public void ContainsCallOnEmptyListRetunsFalse()
+        {
+            // Arrange
+            boolean output;               
+
+            // Act
+            output = dll.contains(1);
+
+            // Assert
+            assertFalse(output);
+        }
+
+        @Test
+        @DisplayName("Llamar a contains donde la lista solo tiene un elemento y es el que se comprueba")
+        public void ContainsCallOnOneSizeListReturnsTrue()
+        {
+            // Arrange
+            boolean output;
+            Integer value = 9;
+
+            // Act 
+            dll.append(value);
+            output = dll.contains(value);
+
+            // Assert
+            assertTrue(output);
+        }
+
+        @Test
+        @DisplayName("Llamar a contains donde la lista solo tiene un elemento y no es el que se comprueba")
+        public void ContainsCallOnOneSizeListReturnsFalse()
+        {
+            // Arrange
+            boolean output;
+            Integer value = 9, checkValue = 8;
+
+            // Act 
+            dll.append(value);
+            output = dll.contains(checkValue);
+
+            // Assert
+            assertFalse(output);
+        }
+
+        @Test
+        @DisplayName("Llamar a contains donde la lista tiene más de un elemento y contiene el que se indica")
+        public void ContainsCallOnMoreThanOneSizeListReturnsTrue()
+        {
+            // Arrange
+            boolean output;
+            Integer value1 = 9,
+                    value2 = 1,
+                    value3 = 6;
+
+            // Act 
+            dll.append(value1);
+            dll.append(value2);
+            dll.append(value3);
+            output = dll.contains(value1);
+
+            // Assert
+            assertTrue(output);
+        }
+
+        @Test
+        @DisplayName("Llamar a contains donde la lista tiene más de un elemento y no contiene el que se indica")
+        public void ContainsCallOnMoreThanOneSizeListReturnsFalse()
+        {
+            // Arrange
+            boolean output;
+            Integer value1 = 9,
+                    value2 = 1,
+                    value3 = 6,
+                    checkValue = 3;
+
+            // Act 
+            dll.append(value1);
+            dll.append(value2);
+            dll.append(value3);
+            output = dll.contains(checkValue);
+
+            // Assert
+            assertFalse(output);
+        }
+
     }
 
     @Nested
@@ -642,6 +731,105 @@ public class DoubleLinkedListTest {
     @DisplayName("Sort Tests")
     class SortTests {
         
-    }
+        Comparator<Integer> comparator;
+
+        @BeforeEach
+        @DisplayName("Inicialización del Comparator")
+        public void setup()
+        {
+            comparator = (x,y) -> x - y;
+        }
+
+        @Test
+        @DisplayName("Realizar un sort a una lista vacía")
+        public void SortEmptyList()
+        {
+            // Arrange
+            Integer expected = 0, output;
+
+            // Act
+            dll.sort(comparator);
+            output = dll.size();
+
+            // Assert
+           assertEquals(expected, output);
+        }
+
+        @Test
+        @DisplayName("Realizar un sort a una lista de un elemento")
+        public void SortOneSizeList()
+        {
+            // Arrange
+            Integer value = 3, output1, output2;
+
+            // Act
+            dll.append(value);
+            dll.sort(comparator);
+            output1 = dll.first();
+            output2 = dll.last();
+
+            // Assert
+           assertEquals(value, output1);
+           assertEquals(value, output2);
+        }
+
+        @Test
+        @DisplayName("Realizar un sort a una lista de varios elementos desordenados")
+        public void SortNotSortedList()
+        {
+            // Arrange
+            Integer[] outputs = new Integer[10],
+                      values = {9, -1, 3, 0, 10, -20, 8, 1, 33, 4},
+                      expected = {-20, -1, 0, 1, 3, 4, 8, 9, 10, 33};
+
+            // Act
+            for(Integer v : values)
+            {
+                dll.append(v);
+            }
+
+            dll.sort(comparator);
+
+            for(int i=0; i<dll.size(); i++)
+            {
+                outputs[i] = dll.get(i);
+            }
+            
+            // Assert
+            for(int i=0; i<dll.size(); i++)
+            {
+                assertEquals(expected[i], outputs[i]);
+            }
+        }
+
+        @Test
+        @DisplayName("Realizar un sort a una lista de varios elementos ordenados")
+        public void SortSortedList()
+        {
+            // Arrange
+            Integer[] outputs = new Integer[10],
+                      values = {-20, -1, 0, 1, 3, 4, 8, 9, 10, 33},
+                      expected = {-20, -1, 0, 1, 3, 4, 8, 9, 10, 33};
+
+            // Act
+            for(Integer v : values)
+            {
+                dll.append(v);
+            }
+
+            dll.sort(comparator);
+
+            for(int i=0; i<dll.size(); i++)
+            {
+                outputs[i] = dll.get(i);
+            }
+            
+            // Assert
+            for(int i=0; i<dll.size(); i++)
+            {
+                assertEquals(expected[i], outputs[i]);
+            }
+        }
+    }   
 
 }

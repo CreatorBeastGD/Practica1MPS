@@ -190,7 +190,12 @@ public class DoubleLinkedList<T> implements DoubleLinkedQueue<T> {
 
     @Override
     public void sort(Comparator<? super T> comparator) {
-        
+
+        if(this.size() == 0)
+        {
+            return;
+        }
+
         boolean swap = true;
 
         while(swap)
