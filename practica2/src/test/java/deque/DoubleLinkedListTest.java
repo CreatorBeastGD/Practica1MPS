@@ -402,6 +402,108 @@ public class DoubleLinkedListTest {
     @DisplayName("Get Tests")
     class GetTests {
 
+        @Test
+        @DisplayName("Hacer operacion get sobre una lista vacía devuelve excepción")
+        public void GetOnEmptyLinkedListReturnsException() {
+            //Arrange
+            int index = 0;
+            Class<IndexOutOfBoundsException> except = IndexOutOfBoundsException.class;
+            String message = "ERROR: Índice introducido incorrecto";
+
+            // Act 
+            Executable exec = () -> dll.get(index);
+
+            //Assert
+            assertThrows(except, exec, message);
+
+        }
+
+        @Nested
+        @DisplayName("En la lista hay al menos un elemento")
+        class GetTestWithOneElement {
+            @BeforeEach
+            public void setup() {
+                Integer value = 33;
+                dll.append(value);
+            }
+
+            @Test
+            @DisplayName("Hacer get sobre una lista con un elemento del indice 0 devuelve ese objeto")
+            public void Get0thElementOfOneElementLinkedListReturnsObject() {
+                // Arrange
+                int index = 0;
+                Integer expected = 33;
+
+                // Act
+                Integer result = dll.get(index);
+
+                // Assert
+                assertEquals(expected, result);
+            }
+
+            @Test
+            @DisplayName("Hacer get con indice negativo lanza excepción")
+            public void GetNegativeElementFromLinkedListThrowsException() {
+                //Arrange
+                int index = -1;
+                Class<IndexOutOfBoundsException> except = IndexOutOfBoundsException.class;
+                String message = "ERROR: Índice introducido incorrecto";
+
+                // Act 
+                Executable exec = () -> dll.get(index);
+
+                //Assert
+                assertThrows(except, exec, message);
+            }
+
+            @Nested
+            @DisplayName("Lista con más de un elemento")
+            class GetTestWithMultipleElements {
+                @BeforeEach
+                @DisplayName("Añadir más elementos")
+                public void setup() {
+                    Integer element1 = 12;
+                    Integer element2 = 90;
+                    Integer element3 = 43;
+
+                    dll.append(element1);
+                    dll.append(element2);
+                    dll.append(element3);
+                }
+
+                @Test
+                @DisplayName("Hacer get con un elemento válido es correcto")
+                public void GetElementWithCorrectIndexReturnsThatElement() {
+                    // Arrange
+                    int index = 2;
+                    Integer expected = 90;
+
+                    // Act
+                    Integer result = dll.get(index);
+
+                    // Assert
+                    assertEquals(expected, result);
+                }
+
+                @Test
+                @DisplayName("Hacer get del ultimo elemento de la lista devuelve el ultimo elemento")
+                public void GetElementWithLastElementIndexReturnsLastElement() {
+                    // Arrange
+                    int index = dll.size()-1;
+                    Integer expected = dll.last();
+                    
+                    // Act
+                    Integer result = dll.get(index);
+                    
+                    // Assert
+                    assertEquals(expected, result);
+                }
+            }
+
+
+        }
+
+
     }
 
     @Nested
@@ -413,6 +515,126 @@ public class DoubleLinkedListTest {
     @Nested
     @DisplayName("Remove Tests")
     class RemoveTests {
+        @Test
+        @DisplayName("Remover un elemento de una lista vacía no hace nada")
+        public void RemoveFromEmptyLinkedListDoesNothing() {
+            // Arange
+            int expected = 0;
+            Integer value = 1;
+            
+            // Act
+            dll.remove(value);
+            int result = dll.size();
+
+            // Assert
+            assertEquals(expected, result);
+        }
+
+        @Nested
+        @DisplayName("Al añadir un elemento")
+        class RemoveTestWithOneElement {
+            @BeforeEach
+            public void setup() {
+                Integer value = 33;
+                dll.append(value);
+            }
+
+            @Test
+            @DisplayName("Eliminar el valor correcto devuelve la lista vacía")
+            public void RemoveElementFromOneElementListEndsUpInEmptyList() {
+                // Arrange
+                Integer element = 33;
+                int expectedSize = 0;
+
+                // Act
+                dll.remove(element);
+                int result = dll.size();
+
+                // Assert
+                assertEquals(expectedSize, result);
+            }
+
+            @Test
+            @DisplayName("Eliminar un valor que no está mantiene la lista como antes")
+            public void RemoveElementNotInOneElementListDoesNothing() {
+                // Arrange
+                Integer element = 32;
+                int expectedSize = 1;
+
+                // Act
+                dll.remove(element);
+                int result = dll.size();
+
+                // Assert
+                assertEquals(expectedSize, result);
+            }
+
+            @Nested
+            @DisplayName("La lista tiene ahora 3 elementos")
+            class RemoveTestThreeElements {
+                @BeforeEach
+                public void setup() {
+                    Integer element1 = 55;
+                    Integer element2 = 12;
+
+                    dll.append(element1);
+                    dll.append(element2);
+                }
+
+                @Test
+                @DisplayName("Al eliminar el primer elemento de la lista, tiene un numero menos de elementos y el first es el segundo")
+                public void whenRemovingFirstElement() {
+                    // Arrange
+                    Integer value = 33;
+                    int expectedSize = 2;
+                    Integer expectedFirst = dll.get(1);
+
+                    // Act
+                    dll.remove(value);
+                    int resultSize = dll.size();
+                    Integer resultFirst = dll.first();
+
+                    // Assert
+                    assertEquals(expectedFirst, resultFirst);
+                    assertEquals(expectedSize, resultSize);
+                }
+
+                @Test
+                @DisplayName("Al eliminar el ultimo elemento de la lista, tiene un numero menos de elementos y el last es el segundo")
+                public void whenRemovingLastElement() {
+                    // Arrange
+                    Integer value = 12;
+                    int expectedSize = 2;
+                    Integer expectedLast = dll.get(1);
+
+                    // Act
+                    dll.remove(value);
+                    int resultSize = dll.size();
+                    Integer resultLast = dll.last();
+
+                    // Assert
+                    assertEquals(expectedLast, resultLast);
+                    assertEquals(expectedSize, resultSize);
+                }
+
+                @Test
+                @DisplayName("Al eliminar el elemento del medio de la lista, tiene un numero menos de elementos")
+                public void whenRemovingMidElement() {
+                    // Arrange
+                    Integer value = 55;
+                    int expectedSize = 2;
+
+                    // Act
+                    dll.remove(value);
+                    int resultSize = dll.size();
+
+                    // Assert
+                    assertEquals(expectedSize, resultSize);
+                }
+            }
+
+
+        }
 
     }
 

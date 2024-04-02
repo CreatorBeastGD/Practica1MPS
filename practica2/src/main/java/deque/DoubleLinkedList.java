@@ -184,6 +184,7 @@ public class DoubleLinkedList<T> implements DoubleLinkedQueue<T> {
             node.setNext(null);
             node.setPrevious(null);
             node = null;
+            size--;
         }
     }
 
