@@ -111,7 +111,7 @@ public class DoubleLinkedList<T> implements DoubleLinkedQueue<T> {
     }
 
     @Override
-    public T get(int index) {
+    public T get(int index) throws IndexOutOfBoundsException {
         
         if(index < 0 || index >= size())
         {
