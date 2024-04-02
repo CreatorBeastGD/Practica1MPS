@@ -189,40 +189,7 @@ public class DoubleLinkedList<T> implements DoubleLinkedQueue<T> {
 
     @Override
     public void sort(Comparator<? super T> comparator) {
-        /* //   CODIGO MARIO
-        if(size() > 1)
-        {
-            LinkedNode<T> actual = first;
-            LinkedNode<T> next = actual.getNext();
-            int comparation;           
-
-            while(next != null)
-            {
-                comparation = comparator.compare(actual.getItem(), next.getItem());
-
-                if(comparation == 1) // actual > next
-                {
-                    next.setPrevious(actual.getPrevious()); // El anterior de next será ahora el anterior de actual
-                    actual.setNext(next.getNext()); // El siguiente de actual será ahora el siguiente de next
-                    
-                    actual.setPrevious(next); // anterior de actual es next
-                    next.setNext(actual); // siguiente de next es actual
-
-                    if(next.getPrevious() == null) // Si next ahora es el first
-                    {
-                        first = next;
-                    }
-
-                    if(actual.getNext() == null) // Si actual ahora es el last
-                    {
-                        last = actual;
-                    }
-                }
-                actual = next;
-                next = next.getNext();
-            }
-        }
-        */
+        
         boolean swap = true;
 
         while(swap)
@@ -271,8 +238,8 @@ public class DoubleLinkedList<T> implements DoubleLinkedQueue<T> {
 
     // CUANDO SE HAGAN LOS TEST, ESTO HAY QUE ELIMINARLO O COMENTARLO
     @Override
-    public String toString()
-    {
+    public String toString() {
+        
         String toString = "DoubleLinkedList: [";
         for (int i = 0 ; i < this.size() ; i++) {
             Object x = this.get(i);
