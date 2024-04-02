@@ -242,7 +242,8 @@ public class DoubleLinkedList<T> implements DoubleLinkedQueue<T> {
         }
     }
 
-    // CUANDO SE HAGAN LOS TEST, ESTO HAY QUE ELIMINARLO O COMENTARLO
+    // Utilizado para pre-tests que hicimos
+    /* 
     @Override
     public String toString() {
         
@@ -262,5 +263,6 @@ public class DoubleLinkedList<T> implements DoubleLinkedQueue<T> {
 
         return toString;
     }
+    */
 
 }

@@ -55,10 +55,12 @@ class LinkedNode<T> {
         return !(isFirstNode() || isLastNode());
     }
 
-    // CUANDO SE HAGAN LOS TEST, ESTO HAY QUE ELIMINARLO O COMENTARLO
+    // Utilizado para pre-tests que hicimos
+    /*
     @Override
     public String toString() {
         String toString = "LinkedNode: [ " + this.getItem().getClass().getSimpleName() + " : " + this.getItem() + " ]";
         return toString; 
     }
+    */
 }
