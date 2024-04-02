@@ -398,4 +398,28 @@ public class DoubleLinkedListTest {
         }
     }
 
+    @Nested
+    @DisplayName("Get Tests")
+    class GetTests {
+
+    }
+
+    @Nested
+    @DisplayName("Contains Tests")
+    class ContainsTests {
+
+    }
+
+    @Nested
+    @DisplayName("Remove Tests")
+    class RemoveTests {
+
+    }
+
+    @Nested
+    @DisplayName("Sort Tests")
+    class SortTests {
+        
+    }
+
 }
