@@ -12,13 +12,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mps.dispositivo.*;
 
 @ExtendWith(MockitoExtension.class)
-public class ronQI2Silvertest {
+public class ronQI2SilverTest {
 
     @Mock
     DispositivoSilver disp;
@@ -74,14 +75,20 @@ public class ronQI2Silvertest {
     @DisplayName("Pruebas del método reconectar")
     class Reconectar_Tests {
 
+        RonQI2Silver ronq;
+
+        @BeforeEach
+        public void setup()
+        {
+            // Step 1: Create the mock object
+            ronq = new RonQI2Silver();
+            ronq.anyadirDispositivo(disp);
+        }
+
         @Test
         @DisplayName("Si se llama a reconectar desde ronQI2 y el dispositivo no está conectado, llamará al conectar de ambos sensores")
         public void ReconectarRonQI2CuandoDispositivoNoConectado_Test()
         {
-            // Step 1: Create the mock object
-            RonQI2Silver ronq = new RonQI2Silver();
-            ronq.anyadirDispositivo(disp);
-
             // Step 2: Define behaviour        
             when(disp.estaConectado()).thenReturn(false);
             when(disp.conectarSensorPresion()).thenReturn(true);
@@ -100,10 +107,6 @@ public class ronQI2Silvertest {
         @DisplayName("Si se llama a reconectar desde ronQI2 y el dispositivo está conectado, no llamará al conectar de ambos sensores")
         public void ReconectarRonQI2CuandoDispositivoEstaConectado_Test()
         {
-            // Step 1: Create the mock object
-            RonQI2Silver ronq = new RonQI2Silver();
-            ronq.anyadirDispositivo(disp);
-
             // Step 2: Define behaviour        
             when(disp.estaConectado()).thenReturn(true);
 
@@ -120,10 +123,6 @@ public class ronQI2Silvertest {
         @DisplayName("Si se llama a reconectar desde ronQI2 y el dispositivo está desconectado pero falla la conexión de un sensor, devuelve falso")
         public void ReconnectRonQI2CuandoDispositivoNoConectado_AlgunSensorFalla_Test()
         {
-            // Step 1: Create the mock object
-            RonQI2Silver ronq = new RonQI2Silver();
-            ronq.anyadirDispositivo(disp);
-
             // Step 2: Define behaviour        
             when(disp.estaConectado()).thenReturn(false);
             when(disp.conectarSensorPresion()).thenReturn(true);
@@ -142,14 +141,9 @@ public class ronQI2Silvertest {
         @DisplayName("Si se llama a reconectar desde ronQI2 y el dispositivo está desconectado pero falla la conexión de los dos sensores, devuelve falso")
         public void ReconnectRonQI2CuandoDispositivoNoConectado_DosSensoresFallan_Test()
         {
-            // Step 1: Create the mock object
-            RonQI2Silver ronq = new RonQI2Silver();
-            ronq.anyadirDispositivo(disp);
-
             // Step 2: Define behaviour        
             when(disp.estaConectado()).thenReturn(false);
             when(disp.conectarSensorPresion()).thenReturn(false);
-            // when(disp.conectarSensorSonido()).thenReturn(false); // No hace falta(?)
 
             // Step 3: Execute
             assertFalse(ronq.reconectar());
@@ -172,16 +166,35 @@ public class ronQI2Silvertest {
     @Nested
     class EvaluarApenaSueno_Tests {
         
+        RonQI2Silver ronq;
+
+        @BeforeEach
+        public void setup()
+        {
+            // Step 1: Create the mock object
+            ronq = new RonQI2Silver();
+            ronq.anyadirDispositivo(disp);
+        }
+
         @Test
-        @DisplayName("happter")
-        public void EvaluarApenaSueno_NormalConditions_IsCorrect() {
-             // Step 1: Create the mock object
+        @DisplayName("Leer 5 lecturas de los sensores y que al evaluar si superan los umbrales")
+        public void EvaluarApenaSueno_CondicionesNormales_Test() 
+        {
+            // Step 2: Define behaviour
+            when(disp.leerSensorPresion()).thenReturn(21.0f);
+            when(disp.leerSensorSonido()).thenReturn(31.0f);
+
+            // Step 3: Execute
+            for(int i=0; i<5; i++) 
+            {
+                ronq.obtenerNuevaLectura();
+            }
+
+            assertTrue(ronq.evaluarApneaSuenyo());
  
-             // Step 2: Define behaviour
- 
-             // Step 3: Execute
- 
-             // Step 4: Verify
+            // Step 4: Verify
+            verify(disp, times(5)).leerSensorPresion();
+            verify(disp, times(5)).leerSensorSonido();
         }
         
     }
