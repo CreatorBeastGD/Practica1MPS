@@ -15,7 +15,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
-
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mps.dispositivo.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -40,6 +41,23 @@ public class ronQI2SilverTest {
     class Inicializar_Tests {
 
         @Test
+        @DisplayName("Si se comprueba que está conectado y realmente lo está, devuelve true")
+        public void EstaConectado_ReturnTrue() {
+            // Step 1: Create the mock object
+            RonQI2Silver ronq = new RonQI2Silver();
+            ronq.anyadirDispositivo(disp);
+
+            // Step 2: Define behaviour  
+            when(ronq.estaConectado()).thenReturn(true);
+
+            // Step 3: Execution
+            assertTrue(ronq.estaConectado());
+
+            // Step 4: Verify
+            verify(disp, times(1)).estaConectado();
+        }
+
+        @Test
         @DisplayName("Tras añadir el dispositivo, si se inicializa el ronQI2 hara que se configura cada sensor una vez")
         public void InicializarRonQI2_Test()
         {
@@ -60,7 +78,98 @@ public class ronQI2SilverTest {
             // verify(disp, times(1)).conectarSensorPresion();
             // verify(disp, times(1)).conectarSensorSonido();
             verify(disp, times(1)).configurarSensorPresion();
+            verify(disp, times(1)).configurarSensorSonido();
+        }
+
+        @Test
+        @DisplayName("Tras añadir el dispositivo, si se inicializa el ronQI2 hara que se configura cada sensor una vez")
+        public void InicializarRonQI2_SensorSonidoDesconectado_Test()
+        {
+            // Step 1: Create the mock object
+            RonQI2Silver ronq = new RonQI2Silver();
+            ronq.anyadirDispositivo(disp);
+
+            // Step 2: Define behaviour        
+            when(disp.configurarSensorPresion()).thenReturn(true);
+            when(disp.conectarSensorPresion()).thenReturn(true);
+            when(disp.conectarSensorSonido()).thenReturn(false);
+
+            // Step 3: Execute
+            assertFalse(ronq.inicializar());
+
+            // Step 4: Verify
+            // verify(disp, times(1)).conectarSensorPresion();
+            // verify(disp, times(1)).conectarSensorSonido();
             verify(disp, times(1)).configurarSensorPresion();
+            verify(disp, never()).configurarSensorSonido();
+        }
+
+        @Test
+        @DisplayName("Tras añadir el dispositivo, si se inicializa el ronQI2 hara que se configura cada sensor una vez")
+        public void InicializarRonQI2_SensorPresionDesconectado_Test()
+        {
+            // Step 1: Create the mock object
+            RonQI2Silver ronq = new RonQI2Silver();
+            ronq.anyadirDispositivo(disp);
+
+            // Step 2: Define behaviour        
+            when(disp.conectarSensorPresion()).thenReturn(false);
+
+            // Step 3: Execute
+            assertFalse(ronq.inicializar());
+
+            // Step 4: Verify
+            // verify(disp, times(1)).conectarSensorPresion();
+            // verify(disp, times(1)).conectarSensorSonido();
+            verify(disp, never()).configurarSensorPresion();
+        }
+
+        @Test
+        @DisplayName("Tras añadir el dispositivo, si se inicializa el ronQI2 hara que se configura cada sensor una vez")
+        public void InicializarRonQI2_ErrorConfiguracionPresion_Test()
+        {
+            // Step 1: Create the mock object
+            RonQI2Silver ronq = new RonQI2Silver();
+            ronq.anyadirDispositivo(disp);
+
+            // Step 2: Define behaviour        
+            when(disp.configurarSensorPresion()).thenReturn(false);
+            when(disp.configurarSensorSonido()).thenReturn(true);
+            when(disp.conectarSensorPresion()).thenReturn(true);
+            when(disp.conectarSensorSonido()).thenReturn(true);
+
+            // Step 3: Execute
+            assertFalse(ronq.inicializar());
+
+            // Step 4: Verify
+            // verify(disp, times(1)).conectarSensorPresion();
+            // verify(disp, times(1)).conectarSensorSonido();
+            verify(disp, times(1)).configurarSensorPresion();
+            verify(disp, times(1)).configurarSensorSonido();
+        }
+
+        @Test
+        @DisplayName("Tras añadir el dispositivo, si se inicializa el ronQI2 hara que se configura cada sensor una vez")
+        public void InicializarRonQI2_ErrorConfiguracionSonido_Test()
+        {
+            // Step 1: Create the mock object
+            RonQI2Silver ronq = new RonQI2Silver();
+            ronq.anyadirDispositivo(disp);
+
+            // Step 2: Define behaviour        
+            when(disp.configurarSensorPresion()).thenReturn(true);
+            when(disp.configurarSensorSonido()).thenReturn(false);
+            when(disp.conectarSensorPresion()).thenReturn(true);
+            when(disp.conectarSensorSonido()).thenReturn(true);
+
+            // Step 3: Execute
+            assertFalse(ronq.inicializar());
+
+            // Step 4: Verify
+            // verify(disp, times(1)).conectarSensorPresion();
+            // verify(disp, times(1)).conectarSensorSonido();
+            verify(disp, times(1)).configurarSensorPresion();
+            verify(disp, times(1)).configurarSensorSonido();
         }
     }
     
@@ -178,7 +287,7 @@ public class ronQI2SilverTest {
 
         @Test
         @DisplayName("Leer 5 lecturas de los sensores y que al evaluar si superan los umbrales")
-        public void EvaluarApenaSueno_CondicionesNormales_Test() 
+        public void EvaluarApenaSueno_CondicionesSobrepasaUmbrales_Test() 
         {
             // Step 2: Define behaviour
             when(disp.leerSensorPresion()).thenReturn(21.0f);
@@ -196,6 +305,27 @@ public class ronQI2SilverTest {
             verify(disp, times(5)).leerSensorPresion();
             verify(disp, times(5)).leerSensorSonido();
         }
+
+        @Test
+        @DisplayName("Leer 5 lecturas de los sensores y que al evaluar alguno no superan los umbrales")
+        public void EvaluarApenaSueno_CondicionesNormales_Test() 
+        {
+            // Step 2: Define behaviour
+            when(disp.leerSensorPresion()).thenReturn(33.0f);
+            when(disp.leerSensorSonido()).thenReturn(1.0f);
+
+            // Step 3: Execute
+            for(int i=0; i<5; i++) 
+            {
+                ronq.obtenerNuevaLectura();
+            }
+
+            assertFalse(ronq.evaluarApneaSuenyo());
+ 
+            // Step 4: Verify
+            verify(disp, times(5)).leerSensorPresion();
+            verify(disp, times(5)).leerSensorSonido();
+        }
         
     }
 
@@ -206,4 +336,61 @@ public class ronQI2SilverTest {
      * Usa el ParameterizedTest para realizar un número de lecturas previas a calcular si hay apnea o no (por ejemplo 4, 5 y 10 lecturas).
      * https://junit.org/junit5/docs/current/user-guide/index.html#writing-tests-parameterized-tests
      */
+
+    @Nested
+    class EvaluarApenaSuenoIndepLecturas_Tests {
+        RonQI2Silver ronq;
+
+        @BeforeEach
+        public void setup()
+        {
+            // Step 1: Create the mock object
+            ronq = new RonQI2Silver();
+            ronq.anyadirDispositivo(disp);
+        }
+
+        @ParameterizedTest
+        @ValueSource(ints  = {1, 3, 5, 7, 9, 15, 20, 26, 55})
+        @DisplayName("Leer las x lecturas pasadas por parametro hace su funcionamiento correcto y no pasa los umbrales")
+        public void EvaluarApneaSueno_MultiTest_NoSobrepasaUmbrales(int val) {
+            // Step 2: Define behaviour
+            when(disp.leerSensorPresion()).thenReturn(12.0f);
+            when(disp.leerSensorSonido()).thenReturn(33.0f);
+
+            // Step 3: Execute
+            for(int i=0; i<val; i++) 
+            {
+                ronq.obtenerNuevaLectura();
+            }
+
+            assertFalse(ronq.evaluarApneaSuenyo());
+ 
+            // Step 4: Verify
+            verify(disp, times(val)).leerSensorPresion();
+            verify(disp, times(val)).leerSensorSonido();
+        }
+
+        @ParameterizedTest
+        @ValueSource(ints  = {1, 3, 5, 7, 9, 15, 20, 26, 55})
+        @DisplayName("Leer las x lecturas pasadas por parametro hace su funcionamiento correcto y no pasa los umbrales")
+        public void EvaluarApneaSueno_MultiTest_SobrepasaUmbrales(int val) {
+            // Step 2: Define behaviour
+            when(disp.leerSensorPresion()).thenReturn(33.0f);
+            when(disp.leerSensorSonido()).thenReturn(33.0f);
+
+            // Step 3: Execute
+            for(int i=0; i<val; i++) 
+            {
+                ronq.obtenerNuevaLectura();
+            }
+
+            assertTrue(ronq.evaluarApneaSuenyo());
+ 
+            // Step 4: Verify
+            verify(disp, times(val)).leerSensorPresion();
+            verify(disp, times(val)).leerSensorSonido();
+        }
+
+
+    }
 }
