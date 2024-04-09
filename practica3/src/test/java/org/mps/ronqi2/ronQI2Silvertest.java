@@ -372,7 +372,7 @@ public class ronQI2SilverTest {
 
         @ParameterizedTest
         @ValueSource(ints  = {1, 3, 5, 7, 9, 15, 20, 26, 55})
-        @DisplayName("Leer las x lecturas pasadas por parametro hace su funcionamiento correcto y no pasa los umbrales")
+        @DisplayName("Leer las x lecturas pasadas por parametro hace su funcionamiento correcto y pasa los umbrales")
         public void EvaluarApneaSueno_MultiTest_SobrepasaUmbrales(int val) {
             // Step 2: Define behaviour
             when(disp.leerSensorPresion()).thenReturn(33.0f);
