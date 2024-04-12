@@ -19,6 +19,11 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mps.dispositivo.*;
 
+/**
+ * @author Javier Molina Colmenero
+ * @author Mario Cortés Herrera
+ */
+
 @ExtendWith(MockitoExtension.class)
 public class ronQI2SilverTest {
 

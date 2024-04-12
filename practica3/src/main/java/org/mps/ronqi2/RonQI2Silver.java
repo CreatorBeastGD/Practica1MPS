@@ -3,6 +3,11 @@ package org.mps.ronqi2;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Javier Molina Colmenero
+ * @author Mario Cortés Herrera
+ */
+
 public class RonQI2Silver extends RonQI2{
     
     private int numLecturas;
@@ -27,6 +32,7 @@ public class RonQI2Silver extends RonQI2{
         if(lecturasP.size()>numLecturas){
             lecturasP.remove(0); 
         }
+        // Un error corregido aquí
         lecturasS.add(disp.leerSensorSonido());
         if(lecturasS.size()>numLecturas){
             lecturasS.remove(0); 
@@ -51,6 +57,7 @@ public class RonQI2Silver extends RonQI2{
                 .average()
                 .orElse(0.0);
         
+        // Dos errores corregidos aquí
         if (avgP > thresholdP && avgS > thresholdS){
             resultado = true;
         }   
