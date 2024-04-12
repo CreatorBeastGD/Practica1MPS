@@ -273,7 +273,7 @@ public class ronQI2SilverTest {
      */
     
     @Nested
-    class EvaluarApenaSueno_Tests {
+    class EvaluarApneaSueno_Tests {
         
         RonQI2Silver ronq;
 
@@ -287,7 +287,7 @@ public class ronQI2SilverTest {
 
         @Test
         @DisplayName("Leer 5 lecturas de los sensores y que al evaluar si superan los umbrales")
-        public void EvaluarApenaSueno_CondicionesSobrepasaUmbrales_Test() 
+        public void EvaluarApneaSueno_CondicionesSobrepasaUmbrales_Test() 
         {
             // Step 2: Define behaviour
             when(disp.leerSensorPresion()).thenReturn(21.0f);
@@ -308,7 +308,7 @@ public class ronQI2SilverTest {
 
         @Test
         @DisplayName("Leer 5 lecturas de los sensores y que al evaluar alguno no superan los umbrales")
-        public void EvaluarApenaSueno_CondicionesNormales_Test() 
+        public void EvaluarApneaSueno_CondicionesNormales_Test() 
         {
             // Step 2: Define behaviour
             when(disp.leerSensorPresion()).thenReturn(33.0f);
@@ -338,7 +338,8 @@ public class ronQI2SilverTest {
      */
 
     @Nested
-    class EvaluarApenaSuenoIndepLecturas_Tests {
+    class EvaluarApenaSueno_LecturasIndependientes_Tests {
+
         RonQI2Silver ronq;
 
         @BeforeEach
@@ -351,8 +352,9 @@ public class ronQI2SilverTest {
 
         @ParameterizedTest
         @ValueSource(ints  = {1, 3, 5, 7, 9, 15, 20, 26, 55})
-        @DisplayName("Leer las x lecturas pasadas por parametro hace su funcionamiento correcto y no pasa los umbrales")
+        @DisplayName("Leer las x lecturas pasadas por parámetro hace su funcionamiento correcto y no pasa los umbrales")
         public void EvaluarApneaSueno_MultiTest_NoSobrepasaUmbrales(int val) {
+
             // Step 2: Define behaviour
             when(disp.leerSensorPresion()).thenReturn(12.0f);
             when(disp.leerSensorSonido()).thenReturn(33.0f);
@@ -372,8 +374,9 @@ public class ronQI2SilverTest {
 
         @ParameterizedTest
         @ValueSource(ints  = {1, 3, 5, 7, 9, 15, 20, 26, 55})
-        @DisplayName("Leer las x lecturas pasadas por parametro hace su funcionamiento correcto y pasa los umbrales")
+        @DisplayName("Leer las x lecturas pasadas por parámetro hace su funcionamiento correcto y pasa los umbrales")
         public void EvaluarApneaSueno_MultiTest_SobrepasaUmbrales(int val) {
+            
             // Step 2: Define behaviour
             when(disp.leerSensorPresion()).thenReturn(33.0f);
             when(disp.leerSensorSonido()).thenReturn(33.0f);
