@@ -27,11 +27,10 @@ import org.junit.jupiter.params.provider.ValueSource;
 public class EvolutionaryAlgorithmTest {
 
     EvolutionaryAlgorithm algorithm;
-
     
     @Nested
     @DisplayName("Operaciones cuando se ejecuta el algoritmo de evolución con datos de entrada erróneos.")
-    public class FailedBuild_Tests
+    class FailedBuild_Tests
     {
         
         SelectionOperator selection;
@@ -115,5 +114,11 @@ public class EvolutionaryAlgorithmTest {
         }
     }
 
+    @Nested
+    @DisplayName("hap")
+    class Hapter
+    {
+
+    }
 
 }
