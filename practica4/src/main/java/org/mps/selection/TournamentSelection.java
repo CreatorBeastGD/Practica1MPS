@@ -41,7 +41,7 @@ public class TournamentSelection implements SelectionOperator {
     @Override
     public int[] select(int[] population) throws EvolutionaryAlgorithmException {
         int[] selected;
-        if (population != null && population.length > 0) {
+        if (population != null && population.length > 0 && tournamentSize <= population.length) {
             selected = new int[population.length];
             for (int i = 0; i < population.length; i++) {
                 int best = -1;
