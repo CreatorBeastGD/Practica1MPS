@@ -52,11 +52,13 @@ public class EvolutionaryAlgorithm {
         if (population != null && population.length > 0) {
 
             // Checkea que la población no tiene valores nulos
+            /*
             for (int i = 0; i < population.length; i++) {
                 if (null == population[i]) {
                     throw new EvolutionaryAlgorithmException("Población no válida");
                 }
             }
+            */
 
             // Creamos una nueva población para los descendientes
             int[][] offspringPopulation = new int[population.length][population.length];
@@ -167,9 +169,9 @@ public class EvolutionaryAlgorithm {
     // Borrar cuando se termine
     public static void main(String[] args) throws EvolutionaryAlgorithmException {
 
-        int[][] population = { { 1, 1, 1, 1 }, { 2, 2, 2, 2 }, { 3, 3, 3, 3 } };
+        int[][] population = { { }, {}, {}, {} };
 
-        SelectionOperator selection = new TournamentSelection(4);
+        SelectionOperator selection = new TournamentSelection(2);
         CrossoverOperator crossover = new OnePointCrossover();
         MutationOperator mutation = new SwapMutation();
 
