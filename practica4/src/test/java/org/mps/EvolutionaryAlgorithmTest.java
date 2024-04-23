@@ -5,6 +5,7 @@ import org.mps.selection.*;
 import org.mps.mutation.*;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Nested;
@@ -291,6 +292,21 @@ public class EvolutionaryAlgorithmTest {
                 // Assert
                 assertDoesNotThrow(input);
             }
+
+            @Test
+            @DisplayName("Caso de ejemplo donde la population es de tamaño 4x4 (array bidimensional NxN) y se hace correctamente optimize, utilizando la funcion better")
+            public void Optimize_NxNLenghtPopulation_UsesBetterFunction_Test() throws EvolutionaryAlgorithmException
+            {
+                // Arrange
+                int [][] population = { {1,2,3,4}, {99,11,22,33}, {1,2,3,4}, {4,3,2,1} };
+                Executable input;
+
+                // Act
+                input = () -> algorithm.optimize(population);
+
+                // Assert
+                assertDoesNotThrow(input);
+            }
             
             @Test
             @DisplayName("Caso de ejemplo donde la population es de tamaño 4x(4,4,5,5) (Hay un par de subarrays con lenght mayor a 4) y se hace correctamente optimize")
@@ -307,11 +323,108 @@ public class EvolutionaryAlgorithmTest {
                 assertDoesNotThrow(input);
             }
 
+        }
 
+        @Nested
+        @DisplayName("Getters y setters")
+        class GetterSetter_Tests {
 
+            @Nested
+            @DisplayName("Getters")
+            class Getter_Tests {
 
+                @Test
+                @DisplayName("Geter de MutationOperation")
+                public void Getter_MutationOperator() {
+                    // Arrange
+                    MutationOperator expected = mutation;
+                    MutationOperator result;
 
+                    // Act
+                    result = algorithm.getMutationOperator();
 
+                    // Assert
+                    assertEquals(expected, result);
+                }
+
+                @Test
+                @DisplayName("Geter de SelectionOperator")
+                public void Getter_SelectionOperator() {
+                    // Arrange
+                    SelectionOperator expected = selection;
+                    SelectionOperator result;
+
+                    // Act
+                    result = algorithm.getSelectionOperator();
+
+                    // Assert
+                    assertEquals(expected, result);
+                }
+
+                @Test
+                @DisplayName("Geter de CrossoverOperator")
+                public void Getter_CrossoverOperation() {
+                    // Arrange
+                    CrossoverOperator expected = crossover;
+                    CrossoverOperator result;
+
+                    // Act
+                    result = algorithm.getCrossoverOperator();
+
+                    // Assert
+                    assertEquals(expected, result);
+                }
+            }
+        
+            @Nested
+            @DisplayName("Setters")
+            class Setter_Tests {
+                
+                @Test
+                @DisplayName("Setter de SelectionOperator")
+                public void Setter_SelectionOperator() throws EvolutionaryAlgorithmException {
+                    // Arrange
+                    SelectionOperator expected = new TournamentSelection(33);
+                    SelectionOperator result;
+
+                    // Act
+                    algorithm.setSelectionOperator(expected);
+                    result = algorithm.getSelectionOperator();
+
+                    // Assert
+                    assertEquals(expected, result);
+                }
+
+                @Test
+                @DisplayName("Setter de MutationOperator")
+                public void Setter_MutationOperator() throws EvolutionaryAlgorithmException {
+                    // Arrange
+                    MutationOperator expected = new SwapMutation();
+                    MutationOperator result;
+
+                    // Act
+                    algorithm.setMutationOperator(expected);
+                    result = algorithm.getMutationOperator();
+
+                    // Assert
+                    assertEquals(expected, result);
+                }
+
+                @Test
+                @DisplayName("Setter de CrossoverOperator")
+                public void Setter_CrossoverOperator() throws EvolutionaryAlgorithmException {
+                    // Arrange
+                    CrossoverOperator expected = new OnePointCrossover();
+                    CrossoverOperator result;
+
+                    // Act
+                    algorithm.setCrossoverOperator(expected);
+                    result = algorithm.getCrossoverOperator();
+
+                    // Assert
+                    assertEquals(expected, result);
+                }
+            }
         }
 
     }

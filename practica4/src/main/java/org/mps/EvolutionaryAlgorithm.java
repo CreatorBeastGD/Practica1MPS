@@ -111,6 +111,7 @@ public class EvolutionaryAlgorithm {
             suma1 += population1[i];
             suma2 += population2[i];
         }
+        System.out.println(suma1<suma2);
         return suma1 < suma2;
     }
 
@@ -141,6 +142,7 @@ public class EvolutionaryAlgorithm {
     }
 
     // Borrar cuando se termine
+    /* 
     public String toStringPopulation(int[][] population) {
         String res = "";
         int suma;
@@ -165,11 +167,13 @@ public class EvolutionaryAlgorithm {
         }
         return res;
     }
+    */
 
     // Borrar cuando se termine
+    /* 
     public static void main(String[] args) throws EvolutionaryAlgorithmException {
 
-        int[][] population = { { }, {}, {}, {} };
+        int[][] population = { {2,2,3,4}, {99,11,22,33}, {1,1,1,1}, {4,3,2,2} };
 
         SelectionOperator selection = new TournamentSelection(2);
         CrossoverOperator crossover = new OnePointCrossover();
@@ -182,5 +186,6 @@ public class EvolutionaryAlgorithm {
         System.out.println("Population después de optimize: \n" + algorithm.toStringPopulation(result));
 
     }
+    */
 
 }
