@@ -12,10 +12,19 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+
+/**
+ * @author Mario Cortés Herrera
+ * @author Javier Molina Colmenero
+ */
+
+/**
+ * NOTA: La coverage es del 100% excepto en SwapMutation.mutate() 
+ * debido a que una rama de esa función nunca se puede recorrer desde la ejecución
+ * de EvolutionaryAlgorithm.optimize() porque la función TournamentSelection.select()
+ * salta primero la excepción por los mismos motivos que la función mutate()
+ */
 
 public class EvolutionaryAlgorithmTest {
 

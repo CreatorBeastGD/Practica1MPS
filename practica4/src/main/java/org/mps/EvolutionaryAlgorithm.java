@@ -1,11 +1,16 @@
 package org.mps;
 
 import org.mps.crossover.CrossoverOperator;
-import org.mps.crossover.OnePointCrossover;
+// import org.mps.crossover.OnePointCrossover;
 import org.mps.mutation.MutationOperator;
-import org.mps.mutation.SwapMutation;
+// import org.mps.mutation.SwapMutation;
 import org.mps.selection.SelectionOperator;
-import org.mps.selection.TournamentSelection;
+// import org.mps.selection.TournamentSelection;
+
+/**
+ * @author Mario Cortés Herrera
+ * @author Javier Molina Colmenero
+ */
 
 /**
  * La clase EvolutionaryAlgorithm representa un algoritmo evolutivo básico que
