@@ -36,11 +36,9 @@ public class EvolutionaryAlgorithm {
     private MutationOperator mutationOperator;
     private CrossoverOperator crossoverOperator;
 
-
-    public EvolutionaryAlgorithm(SelectionOperator selectionOperator, 
-                                MutationOperator mutationOperator,
-                                CrossoverOperator crossoverOperator) throws EvolutionaryAlgorithmException 
-    {
+    public EvolutionaryAlgorithm(SelectionOperator selectionOperator,
+            MutationOperator mutationOperator,
+            CrossoverOperator crossoverOperator) throws EvolutionaryAlgorithmException {
         if (selectionOperator == null || mutationOperator == null || crossoverOperator == null) {
             throw new EvolutionaryAlgorithmException("Argumentos nulos");
         }
@@ -51,15 +49,12 @@ public class EvolutionaryAlgorithm {
 
     public int[][] optimize(int[][] population) throws EvolutionaryAlgorithmException {
 
+        if (population != null && population.length > 0) {
 
-        if (population != null && population.length > 0 && population[0]!=null && population[0].length>0) {
-
-            // Checkea que la población es NxN lenght
-            for(int i=0; i<population.length; i++)
-            {
-                if(population.length != population[i].length)
-                {
-                    throw new EvolutionaryAlgorithmException("La población no es de tamaño N x N");
+            // Checkea que la población no tiene valores nulos
+            for (int i = 0; i < population.length; i++) {
+                if (null == population[i]) {
+                    throw new EvolutionaryAlgorithmException("Población no válida");
                 }
             }
 
@@ -68,11 +63,10 @@ public class EvolutionaryAlgorithm {
 
             // Aplicamos operadores de selección y cruce para generar descendientes
             for (int i = 0; i < population.length; i += 2) {
+
                 // Seleccionamos dos individuos de la población actual
                 int[] parent1 = selectionOperator.select(population[i]);
                 int[] parent2 = selectionOperator.select(population[i + 1]);
-
-                
 
                 // Aplicamos el operador de cruce para generar dos descendientes
                 int[][] offspring = crossoverOperator.crossover(parent1, parent2);
@@ -84,10 +78,11 @@ public class EvolutionaryAlgorithm {
             // Aplicamos operador de mutación a los descendientes
             for (int i = 0; i < offspringPopulation.length; i++) {
                 offspringPopulation[i] = mutationOperator.mutate(offspringPopulation[i]);
-                
+
             }
 
-            // System.out.println("Población mutada: \n" + toStringPopulation(offspringPopulation));
+            // System.out.println("Población mutada: \n" +
+            // toStringPopulation(offspringPopulation));
 
             // Reemplazo
             for (int i = 0; i < population.length; i++) {
@@ -96,7 +91,7 @@ public class EvolutionaryAlgorithm {
                 }
             }
 
-        }else{
+        } else {
             throw new EvolutionaryAlgorithmException("Poblacion no valida");
         }
         return population;
@@ -142,7 +137,8 @@ public class EvolutionaryAlgorithm {
     public void setCrossoverOperator(CrossoverOperator crossoverOperator) {
         this.crossoverOperator = crossoverOperator;
     }
-    
+
+    // Borrar cuando se termine
     public String toStringPopulation(int[][] population) {
         String res = "";
         int suma;
@@ -151,33 +147,34 @@ public class EvolutionaryAlgorithm {
         {
             suma = 0;
             res += "{ ";
-            for(int j=0; j<population[i].length; j++)
+
+            if(population[i] != null)
             {
-                res += population[i][j] + " ";
-                suma += population[i][j];
+                for(int j=0; j<population[i].length; j++)
+                {
+                    res += population[i][j] + " ";
+                    suma += population[i][j];
+                }
+            } else {
+                res = res + "null ";
             }
+            
             res += "} SUM: " + suma + "\n";
         }
         return res;
     }
 
-    public static void main(String[] args) throws EvolutionaryAlgorithmException
-    {
+    // Borrar cuando se termine
+    public static void main(String[] args) throws EvolutionaryAlgorithmException {
 
-        int [][] population = { {1,2,3,4,5,6},
-                                {0,9,1,3,3,9},
-                                {4,3,4,3,7,8},
-                                {4,5,6,7,5,4},
-                                {0,0,0,0,0,1},
-                                {1,2,3,1,3,1}
-                            };
-        
-        SelectionOperator selection = new TournamentSelection(population.length);
+        int[][] population = { { 1, 1, 1, 1 }, { 2, 2, 2, 2 }, { 3, 3, 3, 3 } };
+
+        SelectionOperator selection = new TournamentSelection(4);
         CrossoverOperator crossover = new OnePointCrossover();
         MutationOperator mutation = new SwapMutation();
 
         EvolutionaryAlgorithm algorithm = new EvolutionaryAlgorithm(selection, mutation, crossover);
-        
+
         System.out.println("Population antes de optimize: \n" + algorithm.toStringPopulation(population));
         int[][] result = algorithm.optimize(population);
         System.out.println("Population después de optimize: \n" + algorithm.toStringPopulation(result));
