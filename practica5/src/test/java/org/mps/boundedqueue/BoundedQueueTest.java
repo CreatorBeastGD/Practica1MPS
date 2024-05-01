@@ -274,19 +274,151 @@ public class BoundedQueueTest
                 // Assert
                 assertThat(res).isFalse();
             }
+            @Nested
+            @DisplayName("Pruebas con un iterador de una lista con un elemento")
+            class IteratorWithOneElement {
+                Iterator<Integer> iterator;
+
+                @BeforeEach
+                public void setup() {
+                    iterator = queue.iterator();
+                }
+
+                @Test
+                @DisplayName("Al hacer hasNext con un iterador con un elemento, devolverá true")
+                public void hasNext_OneElementQueue_Test() {
+                    // Arrange
+                    boolean output;
+                        
+                    // Act
+                    output = iterator.hasNext();
+    
+                    // Assert
+                    assertThat(output).isTrue();
+                }
+
+                @Test
+                @DisplayName("Al hacer next con un iterador de una lista de un elemento, se devolverá el objeto.")
+                public void next_OneElementQueue_Test() {
+                    // Arrange
+                    Integer output;
+                        
+                    // Act
+                    output = iterator.next();
+    
+                    // Assert
+                    assertThat(output).isEqualTo(1);
+                }
+
+                @Test
+                @DisplayName("Cuando se hace dos veces Next, entonces devolverá el primer elemento y después hará excepción")
+                public void multipleNext_OneElementQueue_Test() {
+                    Integer firstRes;
+                    Class<NoSuchElementException> expected = NoSuchElementException.class;
+                    String expectedMsg = "next: bounded queue iterator exhausted";
+                    ThrowingCallable tc;
+
+                    // Act
+                    firstRes = iterator.next();
+                    tc = () -> iterator.next();
+
+                    // Assert
+                    assertThat(firstRes).isEqualTo(1);
+                    assertThatExceptionOfType(expected)
+                        .isThrownBy(tc)
+                        .withMessage(expectedMsg);
+                }
+            }
         }
 
         @Nested
         @DisplayName("Pruebas realizadas con una queue con varios elementos (pero no completa).")
         class VariousElementQueue_Tests
         {
+            @BeforeEach
+            public void setup() {
+                queue.put(1);
+                queue.put(2);
+                queue.put(3);
+            }
 
+            
         }
 
         @Nested
         @DisplayName("Pruebas realizadas con una queue completa.")
         class FullQueue_Tests
         {
+            @BeforeEach
+            public void setup() {
+                queue.put(1);
+                queue.put(2);
+                queue.put(3);
+                queue.put(4);
+                queue.put(5);
+            }
+
+            @Test
+            @DisplayName("Cuando se intenta hacer put sobre una queue completa se salta excepcion")
+            public void put_FullQueue_Test() {
+                // Arrange   
+                Class<FullBoundedQueueException> expected = FullBoundedQueueException.class;
+                 
+                String expectedMsg = "put: full bounded queue";
+                ThrowingCallable tc;
+
+                // Act
+                tc = () -> queue.put(33);
+
+                // Assert
+                assertThatExceptionOfType(expected)
+                    .isThrownBy(tc)
+                    .withMessage(expectedMsg);
+            }
+
+            @Test
+            @DisplayName("Cuando se hace Get de todos los elementos, la lista quedará vacía y first y nextfree serán lo mismo")
+            public void getAll_FullQueue_Test() {
+                // Arrange
+                        
+                // Act
+                queue.get();
+                queue.get();
+                queue.get();
+                queue.get();
+                queue.get();
+                
+
+                // Assert
+                assertThat(queue.getFirst()).isEqualTo(queue.getLast());
+            }
+
+            @Test
+            @DisplayName("Comprobar que una queue llena está llena dará true")
+            public void isFull_FullQueue_Test() {
+                // Arrange
+                boolean result;
+
+                // Act
+                result = queue.isFull();
+
+                // Assert
+                assertThat(result).isTrue();
+            }
+
+            @Test
+            @DisplayName("Getfirst y Getlast dan lo mismo")
+            public void GetLast_GetFirst_FullQueue_Test() {
+                // Arrange
+                Integer result1, result2;
+
+                // Act
+                result1 = queue.getFirst();
+                result2 = queue.getLast();
+
+                // Assert
+                assertThat(result1).isEqualTo(result2);
+            } 
 
         }
     }
