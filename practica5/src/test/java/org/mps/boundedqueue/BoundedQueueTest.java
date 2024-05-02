@@ -53,6 +53,25 @@ public class BoundedQueueTest
                 .isThrownBy(tc)
                 .withMessage(expectedMsg);
         }
+
+        @Test
+        @DisplayName("Cuando se hace put() con un argumento nulo lanza excepción")
+        public void Put_NullValue_Test()
+        {
+            // Arange
+            queue = new ArrayBoundedQueue<Integer>(2);
+            ThrowingCallable tc;
+            Class<IllegalArgumentException> expected = IllegalArgumentException.class;
+            String expectedMsg = "put: element cannot be null";
+
+            // Act
+            tc = () -> queue.put(null);
+
+            // Assert
+            assertThatExceptionOfType(expected)
+                .isThrownBy(tc)
+                .withMessage(expectedMsg);
+        }
     }
 
 
@@ -235,6 +254,21 @@ public class BoundedQueueTest
             }
             
             @Test
+            @DisplayName("El size de la queue es uno")
+            public void size_ReturnsOne_Test()
+            {
+                // Arrange
+                int output,
+                    expected = 1;
+
+                // Act 
+                output = queue.size();
+
+                // Assert
+                assertThat(output).isEqualTo(expected);
+            }
+            
+            @Test
             @DisplayName("El elemento getLast() es el mismo que el siguiente del primero")
             public void GetLast_Equals_GetFirstPlusOne_Test() {
                 // Arrange
@@ -274,6 +308,57 @@ public class BoundedQueueTest
                 // Assert
                 assertThat(res).isFalse();
             }
+            
+            @Test
+            @DisplayName("Llamar a get() devuelve el único elemento de queue la primera vez y lanza excepción la segunda vez")
+            public void get_OnlyOneElement_Test()
+            {
+                // Arrange
+                Integer expectedValue = 1, output;
+                Class<EmptyBoundedQueueException> expected = EmptyBoundedQueueException.class;
+                String expectedMsg = "get: empty bounded queue";
+                ThrowingCallable tc;
+
+                // Act
+                output = queue.get();
+                tc = () -> queue.get();
+                
+                // Assert
+                assertThat(output).isEqualTo(expectedValue);
+                assertThatExceptionOfType(expected)
+                    .isThrownBy(tc)
+                    .withMessage(expectedMsg);
+            }
+
+            @Test
+            @DisplayName("Se puede realizar put() size-1 veces y la siguiente lanzará excepción")
+            public void put_OnlySizeMinusOneTimes_Test()
+            {
+                // Arrange
+                ThrowingCallable [] tc = new ThrowingCallable[5];
+                Integer [] values = {1,2,3,4,5};
+                Class<FullBoundedQueueException> expected = FullBoundedQueueException.class;
+                String expectedMsg = "put: full bounded queue";
+
+                // Act
+                tc[0] = () -> queue.put(values[0]);
+                tc[1] = () -> queue.put(values[1]);
+                tc[2] = () -> queue.put(values[2]);
+                tc[3] = () -> queue.put(values[3]);
+                tc[4] = () -> queue.put(values[4]);
+
+                // Assert
+                for(int i=0; i<4; i++)
+                {
+                    assertThatNoException().isThrownBy(tc[i]);
+                }
+                
+                assertThatExceptionOfType(expected)
+                    .isThrownBy(tc[4])
+                    .withMessage(expectedMsg);
+                
+            }
+            
             @Nested
             @DisplayName("Pruebas con un iterador de una lista con un elemento")
             class IteratorWithOneElement {
@@ -340,9 +425,37 @@ public class BoundedQueueTest
                 queue.put(1);
                 queue.put(2);
                 queue.put(3);
+                queue.put(4);
             }
 
-            
+            @Test
+            @DisplayName("Una lista que tenga entre 0 y 5 elemenentos no inclusive, no estará ni llena ni vacía")
+            public void IsEmpty_IsFull_VariousQueue_Test() {
+                // Arrange
+                boolean result;
+                
+                // Act
+                result = queue.isEmpty() || queue.isFull();
+
+                // Assert
+                assertThat(result).isFalse();
+            }
+
+            @Test
+            @DisplayName("Añadir un elemento más hará que el elemento getLast sea el primero")
+            public void Put_GetLast_VariousQueue_Test() {
+                // Arrange
+                Integer first, last;
+
+                // Act
+                queue.put(5);
+                first = queue.getFirst();
+                last = queue.getLast();
+                
+
+                // Assert
+                assertThat(first).isEqualTo(last);
+            }
         }
 
         @Nested
@@ -356,6 +469,21 @@ public class BoundedQueueTest
                 queue.put(3);
                 queue.put(4);
                 queue.put(5);
+            }
+
+            @Test
+            @DisplayName("El size de la queue es cinco")
+            public void size_ReturnsOne_Test()
+            {
+                // Arrange
+                int output,
+                    expected = 5;
+
+                // Act 
+                output = queue.size();
+
+                // Assert
+                assertThat(output).isEqualTo(expected);
             }
 
             @Test
@@ -407,6 +535,19 @@ public class BoundedQueueTest
             }
 
             @Test
+            @DisplayName("Una lista completa, no estará vacía")
+            public void IsEmpty_FullQueue_Test() {
+                // Arrange
+                boolean result;
+                
+                // Act
+                result = queue.isEmpty();
+
+                // Assert
+                assertThat(result).isFalse();
+            }
+
+            @Test
             @DisplayName("Getfirst y Getlast dan lo mismo")
             public void GetLast_GetFirst_FullQueue_Test() {
                 // Arrange
@@ -418,9 +559,43 @@ public class BoundedQueueTest
 
                 // Assert
                 assertThat(result1).isEqualTo(result2);
-            } 
+            }
 
+            @Nested
+            @DisplayName("Pruebas de un iterador sobre una lista llena")
+            class Iterator_FullQueue_Tests {
+                
+                Iterator<Integer> iterator;
+                
+                @BeforeEach
+                public void setup() {
+                    iterator = queue.iterator();
+                }
+
+                @Test
+                @DisplayName("Se hará next tantas veces como la capacidad del objeto, después lanza excepción")
+                public void hasNextRoute_FullQueue_Test() {
+                    // Arrange
+                    int expectedTimes = queue.size();
+                    int result = 0;
+                    Class<NoSuchElementException> expected = NoSuchElementException.class;
+                    String expectedMsg = "next: bounded queue iterator exhausted";
+                    ThrowingCallable tc;
+                    
+                    // Act
+                    while(iterator.hasNext()) {
+                        iterator.next();
+                        result++;
+                    }
+                    tc = () -> iterator.next();
+
+                    // Assert
+                    assertThat(expectedTimes).isEqualTo(result);
+                    assertThatExceptionOfType(expected)
+                        .isThrownBy(tc)
+                        .withMessage(expectedMsg);
+                }
+            }
         }
     }
-
 }
