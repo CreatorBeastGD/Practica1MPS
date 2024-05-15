@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
 
-import org.springframework.test.web.servlet.MvcResult;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uma.example.springuma.model.Medico;
 import com.uma.example.springuma.model.Paciente;
@@ -234,6 +233,4 @@ public class PacienteControllerIT extends AbstractIntegration {
             .andExpect(jsonPath("$", hasSize(1)))
             .andExpect(jsonPath("$[0].id").value(paciente2.getId()));
     }
-    
-
 }
