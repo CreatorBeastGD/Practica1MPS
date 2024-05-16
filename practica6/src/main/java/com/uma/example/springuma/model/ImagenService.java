@@ -70,10 +70,8 @@ public class ImagenService {
         imagen.setPaciente(paciente);
         imagen.setFecha(Calendar.getInstance());
         imagen = repositoryImagen.saveAndFlush(imagen);
-        if (imagen != null) {
-            return "{\"response\" : \"file uploaded successfully : " + file.getOriginalFilename()+"\"}";
-        }
-        return null;
+
+        return "{\"response\" : \"file uploaded successfully : " + file.getOriginalFilename()+"\"}";
     }
 
     public byte[] downloadImage(long id) {

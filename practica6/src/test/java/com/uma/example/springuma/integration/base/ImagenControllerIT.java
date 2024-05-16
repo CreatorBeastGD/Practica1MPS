@@ -1,7 +1,6 @@
 package com.uma.example.springuma.integration.base;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import java.io.File;
 import java.time.Duration;
@@ -9,7 +8,6 @@ import java.util.Calendar;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.core.io.FileSystemResource;
@@ -17,23 +15,18 @@ import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.test.web.reactive.server.FluxExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.reactive.function.BodyInserters;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uma.example.springuma.model.Imagen;
 import com.uma.example.springuma.model.Medico;
 import com.uma.example.springuma.model.Paciente;
 
 import jakarta.annotation.PostConstruct;
+import reactor.core.publisher.Mono;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ImagenControllerIT extends AbstractIntegration {
-    @Autowired
-    private MockMvc mockMvc;
 
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @LocalServerPort
     private Integer port;
@@ -56,9 +49,11 @@ public class ImagenControllerIT extends AbstractIntegration {
         medico.setNombre(nombre);
 
         // Creación
-        this.mockMvc.perform(post("/medico")
-            .contentType("application/json")
-            .content(objectMapper.writeValueAsString(medico)));
+        webTestClient.post().uri("/medico")
+            .body(Mono.just(medico), Medico.class)
+            .exchange()
+            .expectStatus().isCreated()
+            .expectBody().returnResult();
         
         return medico;
     }
@@ -77,9 +72,11 @@ public class ImagenControllerIT extends AbstractIntegration {
         paciente.setMedico(medico);
 
         // Creación
-        this.mockMvc.perform(post("/paciente")
-            .contentType("application/json")
-            .content(objectMapper.writeValueAsString(paciente)));
+        webTestClient.post().uri("/paciente")
+            .body(Mono.just(paciente), Paciente.class)
+            .exchange()
+            .expectStatus().isCreated()
+            .expectBody().returnResult();
         
         return paciente;
     }

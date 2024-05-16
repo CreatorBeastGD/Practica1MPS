@@ -1,7 +1,6 @@
 package com.uma.example.springuma.integration.base;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import java.io.File;
 import java.time.Duration;
@@ -9,7 +8,6 @@ import java.util.Calendar;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.core.io.FileSystemResource;
@@ -17,25 +15,18 @@ import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.test.web.reactive.server.FluxExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.reactive.function.BodyInserters;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uma.example.springuma.model.Imagen;
 import com.uma.example.springuma.model.Informe;
 import com.uma.example.springuma.model.Medico;
 import com.uma.example.springuma.model.Paciente;
 
 import jakarta.annotation.PostConstruct;
+import reactor.core.publisher.Mono;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class InformeControllerIT extends AbstractIntegration {
-    
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @LocalServerPort
     private Integer port;
@@ -46,6 +37,7 @@ public class InformeControllerIT extends AbstractIntegration {
     private Informe informe;
     private Medico medico;
     private Paciente paciente;
+    private String prediction;
 
     public Medico crearMedico() throws Exception {
         return crearMedico("3333A", "Mamografia", 1, "Fernando");
@@ -59,9 +51,12 @@ public class InformeControllerIT extends AbstractIntegration {
         medico.setNombre(nombre);
 
         // Creación
-        this.mockMvc.perform(post("/medico")
-            .contentType("application/json")
-            .content(objectMapper.writeValueAsString(medico)));
+        webTestClient.post().uri("/medico")
+            .body(Mono.just(medico), Medico.class)
+            .exchange()
+            .expectStatus().isCreated()
+            .expectBody().returnResult();
+
         
         return medico;
     }
@@ -80,9 +75,11 @@ public class InformeControllerIT extends AbstractIntegration {
         paciente.setMedico(medico);
 
         // Creación
-        this.mockMvc.perform(post("/paciente")
-            .contentType("application/json")
-            .content(objectMapper.writeValueAsString(paciente)));
+        webTestClient.post().uri("/paciente")
+            .body(Mono.just(paciente), Paciente.class)
+            .exchange()
+            .expectStatus().isCreated()
+            .expectBody().returnResult();
         
         return paciente;
     }
@@ -107,7 +104,7 @@ public class InformeControllerIT extends AbstractIntegration {
             .contentType(MediaType.MULTIPART_FORM_DATA)
             .body(BodyInserters.fromMultipartData(builder.build()))
             .exchange()
-            .expectStatus().is2xxSuccessful();;
+            .expectStatus().is2xxSuccessful();
 
 
         return imagen;
@@ -131,15 +128,65 @@ public class InformeControllerIT extends AbstractIntegration {
             .expectStatus().isOk().returnResult(String.class); // comprueba que la respuesta es de tipo String
 
         String json = result.getResponseBody().blockFirst();
+        prediction = json.substring(16, 36);
 
+        if(!prediction.equals("Not cancer (label 0)"))
+        {
+            prediction = json.substring(16, 32);
+        }
         
         informe = new Informe();
         informe.setId(1);
         informe.setImagen(imagen);
-        informe.setPrediccion(null);
-
+        informe.setPrediccion(prediction);
     }
 
+    @Test
+    @DisplayName("Subir un informe y obtenerlo después para ver si se insertó correctamente sus datos")
+    public void submitInformeRespondsValidResponse_Test() throws Exception {
 
+        // Creación
+        webTestClient.post().uri("/informe")
+            .body(Mono.just(informe), Informe.class)
+            .exchange()
+            .expectStatus().isCreated()
+            .expectBody().returnResult();
+        
+        //Obtiene el informe con ID 1
+        FluxExchangeResult<Informe> result = webTestClient.get().uri("/informe/1")
+            .exchange()
+            .expectStatus().isOk()
+            .returnResult(Informe.class);
+
+        Informe output = result.getResponseBody().blockFirst();
+
+        assertEquals(informe.getContenido(), output.getContenido());
+        assertEquals(informe.getId(), output.getId());
+        String output_prediccion = output.getPrediccion().substring(0, 20);
+        assertEquals(informe.getPrediccion(), output_prediccion);
+        
+    }
+
+    @Test
+    @DisplayName("Subir un informe y borrarlo despuéss")
+    public void submitInformeAndDeleteValidResponse_Test() throws Exception {
+
+        // Creación
+        webTestClient.post().uri("/informe")
+            .body(Mono.just(informe), Informe.class)
+            .exchange()
+            .expectStatus().isCreated()
+            .expectBody().returnResult();
+        
+        //Elimina el informe
+        FluxExchangeResult<String> result = webTestClient.delete().uri("/informe/1")
+            .exchange()
+            .expectStatus().isNoContent()
+            .returnResult(String.class);
+     
+        String response = result.getResponseBody().blockFirst();
+        assertEquals(null, response);
+        
+    }
 
 }
