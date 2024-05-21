@@ -1,0 +1,8 @@
+2024-05-21 18:18:55.908728+02:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "INSERT INTO MEDICO (ID, DNI, ESPECIALIDAD, NOMBRE) VALUES (1, 3333333[*]A, Hapter, Ter)"; se esperaba "[, ., ::, AT, FORMAT, *, /, %, +, -, ||, NOT, IS, ILIKE, REGEXP, AND, OR, ,, )"
+Syntax error in SQL statement "INSERT INTO MEDICO (ID, DNI, ESPECIALIDAD, NOMBRE) VALUES (1, 3333333[*]A, Hapter, Ter)"; expected "[, ., ::, AT, FORMAT, *, /, %, +, -, ||, NOT, IS, ILIKE, REGEXP, AND, OR, ,, )"; SQL statement:
+INSERT INTO MEDICO (ID, DNI, ESPECIALIDAD, NOMBRE) VALUES (1, 3333333A, Hapter, Ter) [42001-224]
+2024-05-21 18:19:08.323478+02:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "INSERT INTO MEDICO (ID, DNI, ESPECIALIDAD, NOMBRE) VALUES (1, 3333333[*]A, 'Hapter', 'Ter')"; se esperaba "[, ., ::, AT, FORMAT, *, /, %, +, -, ||, NOT, IS, ILIKE, REGEXP, AND, OR, ,, )"
+Syntax error in SQL statement "INSERT INTO MEDICO (ID, DNI, ESPECIALIDAD, NOMBRE) VALUES (1, 3333333[*]A, 'Hapter', 'Ter')"; expected "[, ., ::, AT, FORMAT, *, /, %, +, -, ||, NOT, IS, ILIKE, REGEXP, AND, OR, ,, )"; SQL statement:
+INSERT INTO MEDICO (ID, DNI, ESPECIALIDAD, NOMBRE) VALUES (1, 3333333A, 'Hapter', 'Ter') [42001-224]
