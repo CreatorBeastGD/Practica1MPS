@@ -6,30 +6,27 @@ import { sleep, check } from 'k6';
  * @author Mario Cortés Herrera
  */
 
+const VUS_MAX = 10315
+
 // Opciones del test
 export const options = 
 {
-    scenarios: 
-    {
-        breakpoint: 
-        {
-            maxVUs: 1e6,                      // Muchos usuarios
-            stages: 
-            [{ 
-                duration: "10m",            // Duración de 10 minutos
-                target: 100000              // Al menos 100000 VUs
-            }],
-            preAllocatedVUs: 1000           
-        }
-    },
+    
+    stages: [
+        {duration: '3m', target: (0.8 * VUS_MAX)},
+        {duration: '3m', target: (0.8 * VUS_MAX)},
+        {duration: '2m', target: 0}
+    ],
     thresholds: 
     {
         // Peticiones fallidas mayores a 1%, sino aborta
-        http_req_failed: [{ threshold: "rate<=0.01", abortOnFail: true }]
+        http_req_failed: [{ threshold: "rate<=0.01", abortOnFail: true }],
+        // El promedio de la duracion de las peticiones debe ser de 1000ms
+        http_req_duration: ['avg<1000'] 
     }
 };
 
-// Breakpoint Test
+// Smoke Test
 export default () => 
 {
     // Arrange
