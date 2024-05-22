@@ -6,15 +6,15 @@ import { sleep, check } from 'k6';
  * @author Mario Cortés Herrera
  */
 
-const VUS_MAX = 10315
+const VUS_MAX = 9186
 
 // Opciones del test
 export const options = 
 {
     
     stages: [
-        {duration: '3m', target: (0.8 * VUS_MAX)},
-        {duration: '3m', target: (0.8 * VUS_MAX)},
+        {duration: '3m', target: Math.floor(0.8 * VUS_MAX)},
+        {duration: '3m', target: Math.floor(0.8 * VUS_MAX)},
         {duration: '2m', target: 0}
     ],
     thresholds: 
@@ -22,7 +22,7 @@ export const options =
         // Peticiones fallidas mayores a 1%, sino aborta
         http_req_failed: [{ threshold: "rate<=0.01", abortOnFail: true }],
         // El promedio de la duracion de las peticiones debe ser de 1000ms
-        http_req_duration: ['avg<1000'] 
+        http_req_duration: [{threshold: "avg<1000", abortOnFail: true}] 
     }
 };
 
