@@ -3,17 +3,20 @@ import { sleep, check } from 'k6';
 
 /**
  * @author Javier Molina Colmenero
+ * vus_max = 9254
  * @author Mario Cortés Herrera
  */
 
 // Opciones del test
+const VUS_MAX = 9254
+
 export const options = 
 {
     stages: 
     [
         // Duración total de 2 minutos
         // 40% de la carga máxima
-        { duration: '1m', /*target: */ },
+        { duration: '1m', target: Math.floor(0.4 * VUS_MAX) },
         { duration: '1m', target: 0 },
     ],
     thresholds: 

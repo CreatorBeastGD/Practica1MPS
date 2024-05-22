@@ -3,30 +3,29 @@ import { sleep, check } from 'k6';
 
 /**
  * @author Javier Molina Colmenero
+ * VUS_MAX = 9254
  * @author Mario Cortés Herrera
  */
+
+const VUS_MAX = 9254;
 
 // Opciones del test
 export const options = 
 {
-    tages: 
+    stages: 
     [
         // Como Stress Test pero la carga promedio es del 50% de VUs del 
-        /*
-        { duration: '', target:  },
-        { duration: '', target:  },
-        { duration: '', target: 0 }
-        */
+        
+        { duration: '3m', target: Math.floor(0.5 * VUS_MAX) },
+        { duration: '3m', target: Math.floor(0.5 * VUS_MAX)  },
+        { duration: '2m', target: 0 }
+        
     ],
     thresholds: 
     {
         http_req_failed: 
-        [
-            {
-                // Peticiones fallidas menor a 1%, sino aborta
-                threshold: "rate<=0.01",
-                abortOnFail: true,
-            }
+        [   // Peticiones fallidas menor a 1%, sino aborta
+            {threshold: "rate<=0.01", abortOnFail: true,}
         ]
     }
 };

@@ -3,10 +3,11 @@ import { sleep, check } from 'k6';
 
 /**
  * @author Javier Molina Colmenero
+ * vus_max = 9254
  * @author Mario Cortés Herrera
  */
 
-const VUS_MAX = 9186
+const VUS_MAX = 9254
 
 // Opciones del test
 export const options = 
