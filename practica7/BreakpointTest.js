@@ -9,19 +9,11 @@ import { sleep, check } from 'k6';
 // Opciones del test
 export const options = 
 {
-    scenarios: 
-    {
-        breakpoint: 
-        {
-            maxVUs: 1e6,                      // Muchos usuarios
-            stages: 
-            [{ 
-                duration: "10m",            // Duración de 10 minutos
-                target: 100000              // Al menos 100000 VUs
-            }],
-            preAllocatedVUs: 1000           
-        }
-    },
+    stages: 
+    [{ 
+        duration: "10m",            // Duración de 10 minutos
+        target: 100000              // Al menos 100000 VUs
+    }],
     thresholds: 
     {
         // Peticiones fallidas mayores a 1%, sino aborta
