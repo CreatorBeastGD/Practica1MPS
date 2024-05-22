@@ -7,9 +7,11 @@ import { sleep, check } from 'k6';
  * @author Mario Cortés Herrera
  */
 
-// Opciones del test
-const VUS_MAX = 9254
 
+// const VUS_MAX = 9254 // Javi
+const VUS_MAX = 9477 // Mario
+
+// Opciones del test
 export const options = 
 {
     stages: 

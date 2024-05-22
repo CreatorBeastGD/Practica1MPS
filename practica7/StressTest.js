@@ -5,9 +5,11 @@ import { sleep, check } from 'k6';
  * @author Javier Molina Colmenero
  * vus_max = 9254
  * @author Mario Cortés Herrera
+ * vus_max = 9477
  */
 
-const VUS_MAX = 9254
+const VUS_MAX = 9254 // Javi
+// const VUS_MAX = 9477 // Mario
 
 // Opciones del test
 export const options = 
