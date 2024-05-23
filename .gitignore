@@ -53,3 +53,6 @@ practica2/.vscode/*
 
 #fakin node-modules
 node_modules
+
+#cosas de la practica 8
+practica8/.angular/cache/*
