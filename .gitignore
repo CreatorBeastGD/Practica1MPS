@@ -50,3 +50,6 @@ practica2/.vscode/*
 
 # Built Visual Studio Code Extensions
 *.vsix
+
+#fakin node-modules
+node-modules
