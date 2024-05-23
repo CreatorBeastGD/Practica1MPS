@@ -24,17 +24,30 @@ export default async function () {
 
     page.locator('input[name="nombre"]').type('Ter');
     page.locator('input[name="DNI"]').type('3333333');
+    sleep(3);
 
     const submitButton = page.locator('button[name="login"]');
+    await Promise.all([page.waitForNavigation({waitUntil: 'networkidle'}), submitButton.click()]);
+    sleep(3);
 
-    await Promise.all([page.waitForNavigation(), submitButton.click()]);
+    const last_row = page.$$("table tbody tr")[0]; // Primera fila de la tabla
+    await Promise.all([page.waitForNavigation({waitUntil: 'networkidle'}), last_row.click()]);
+    page.waitForSelector('table tbody')
+    sleep(1);
 
-    const tabla =  page.$$('table tbody tr')[0]
+    const eyeButton = page.$$('table tbody tr')[0].$('button[name="view"]');
+    await Promise.all([page.waitForNavigation({waitUntil: 'networkidle'}), eyeButton.click()])
+    sleep(1);
 
-    await Promise.all([page.waitForNavigation(), tabla.click()])
+    const predictButton = page.locator('button[name="predict"]');
+    await Promise.all([predictButton.click()])
+    sleep(10);
+
+    console.log(page.locator('span[name="predict"]').textContent());
+
 
     check(page, {
-      'header' : p => p.locator('h2').textContent() == 'Listado de pacientes',
+      'prediction': p => p.locator('span[name="predict"]').textContent().includes('Probabilidad de cáncer:')
     });
   } finally {
     page.close();

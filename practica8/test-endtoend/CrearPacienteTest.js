@@ -49,7 +49,7 @@ export default async function ()
         await Promise.all([page.waitForNavigation({waitUntil: 'networkidle'}), addButton.click()]);
         sleep(3);
 
-        const datos = ['5555555', 'Pepa', '35', 'Revisión importante'];
+        const datos = ['12345678A', 'Peppa', '33', 'Revisión importante'];
         page.locator('input[name="dni"]').type(datos[0]); // Escribir el DNI
         page.locator('input[name="nombre"]').type(datos[1]); // Escribir el Nombre
         page.locator('input[name="edad"]').type(datos[2]); // Escribir la edad
@@ -66,11 +66,12 @@ export default async function ()
         await Promise.all([page.waitForNavigation({waitUntil: 'networkidle'}), last_row.click()]);
         sleep(3);
 
-        const info_paciente = page.$$(".detalle-paciente fieldset div");
-        const dni = info_paciente[0].$('span').textContent;
-        const nombre = info_paciente[1].$('span').textContent;
-        const edad = info_paciente[2].$('span').textContent;
-        const cita = info_paciente[3].$('span').textContent;
+        const info_paciente = page.$$('div.detalle-item');
+
+        let dni = info_paciente[0].$('span').textContent();
+        let nombre = info_paciente[1].$('span').textContent();
+        let edad = info_paciente[2].$('span').textContent();
+        let cita = info_paciente[3].$('span').textContent();
 
         console.log(dni, nombre, edad, cita)
 
