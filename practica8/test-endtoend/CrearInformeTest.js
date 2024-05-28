@@ -40,17 +40,43 @@ export default async function () {
     await Promise.all([page.waitForNavigation({waitUntil: 'networkidle'}), eyeButton.click()])
     sleep(3);
 
+    // Predecir
     const predictButton = page.locator('button[name="predict"]');
-    await Promise.all([predictButton.click()])
-    sleep(10);
+    await Promise.all([predictButton.click()]);
+    sleep(3);
 
-    console.log(page.locator('span[name="predict"]').textContent());
+    // Pulsar en añadir informe
+    const addInformeButton = page.locator('button[name="add"]');
+    await Promise.all([page.waitForNavigation({waitUntil: 'networkidle'}), addInformeButton.click()]);
+    sleep(3);
 
+    // Escribir texto de informe
+    const informe = "¡Todo bien!";
+    page.locator('textarea').type(informe);
+    sleep(3);
+    
+    // Pulsar en guardar informe
+    const saveInformeButton = page.locator('button[name="save"]');
+    await Promise.all([page.waitForNavigation({waitUntil: 'networkidle'}), saveInformeButton.click()]);
+    sleep(3);
 
-    check(page, {
-      'prediction': p => p.locator('span[name="predict"]').textContent().includes('Probabilidad de cáncer:')
-    });
-  } finally {
+    const infoList = page.$$('.info-item');
+    const informeItem = infoList[infoList.length - 1];
+    const headerInforme = informeItem.$('.info-label');
+    const contentInforme = informeItem.$('.info-value');
+    
+    console.log(headerInforme.textContent());
+    console.log(contentInforme.textContent());
+
+    const test = 
+    {
+        'CrearInformeTest': headerInforme.textContent().includes("El médico ha anotado:") && contentInforme.textContent().includes(informe)
+    };
+
+    check(page, test);
+
+  } 
+  finally {
     page.close();
   }
 }
