@@ -1,6 +1,11 @@
 import { browser } from 'k6/experimental/browser';
 import { check, sleep } from 'k6';
 
+/**
+ * @author Mario Cortés Herrera
+ * @author Javier Molina Colmenero
+ */
+
 export const options = {
   scenarios: {
     ui: {
